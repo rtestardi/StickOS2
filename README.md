@@ -15,4 +15,5 @@ running on a computer, tablet, or phone (!!!), with no need for further software
 web-page and you are up and running!
 
 See the Flea Scope™ User's Guide: [https://rtestardi.github.io/usbte/flea-scope.pdf](https://rtestardi.github.io/usbte/flea-scope.pdf)
+
 See the StickOS® BASIC website: [https://rtestardi.github.io/StickOS/](https://rtestardi.github.io/StickOS/)
