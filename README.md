@@ -14,4 +14,5 @@ A StickOS-capable MCU can be controlled by any Chromium-based web browser that s
 running on a computer, tablet, or phone (!!!), with no need for further software install -– just plug it in and open a
 web-page and you are up and running!
 
-See the website: [https://rtestardi.github.io/StickOS/](https://rtestardi.github.io/StickOS/)
+See the Flea Scope™ User's Guide: [https://rtestardi.github.io/usbte/flea-scope.pdf](https://rtestardi.github.io/usbte/flea-scope.pdf)
+See the StickOS® BASIC website: [https://rtestardi.github.io/StickOS/](https://rtestardi.github.io/StickOS/)
