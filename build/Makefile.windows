@@ -1,0 +1,71 @@
+###############################################################################
+# WARNING DANGER BUGS WARNING DANGER BUGS WARNING DANGER BUGS WARNING DANGER  #
+# ***** no spaces allowed in path names to $(ROOTDIR) or in file names  ***** #
+###############################################################################
+
+# build/Makefile.windows
+
+# compiler flags
+CLFLAGS = /nologo /W3 /FR \
+          /MTd \
+          /D "_CONSOLE" /D "_WIN32" /D "WIN32" /D "STICK_GUEST" \
+          /D _CRT_SECURE_NO_WARNINGS \
+          /WX \
+          $(foreach a,$(subst ., ,$(TARGET)),/D $(a)) \
+          $(foreach a,$(subst ., ,$(BUILD)),/D $(a)) \
+          $(foreach a,$(subst ., ,$(CPU)),/D $(a)) \
+          $(foreach a,$(subst ., ,$(MODE)),/D $(a)) \
+          $(DEFINES:%=/D %) \
+          $(foreach a,$(SOURCEDIRS:;= ),/I $(a))
+
+ifeq (RELEASE,$(findstring RELEASE,$(MODE)))
+CLFLAGS += /Zi
+else
+CLFLAGS += /Zi /RTC1
+endif
+
+# lib flags
+LIBFLAGS = /nologo
+
+# linker flags
+LINKFLAGS = /nologo -subsystem:console -machine:I386 /DEBUG
+
+OBJECTS = $(SOURCES:%.c=%.obj)
+OBJECTASMS = $(ASMS:%.s=%.obj)
+OBJECTLIBS = $(LIBS:%=%.lib)
+
+%.obj: %.c
+	echo cl /c $< >&2; \
+	cl $(CLFLAGS) /c c:$<
+
+ifeq (PROGRAM, $(TARGETTYPE))
+
+target: $(TARGET).exe
+$(TARGET).exe: $(LCFS) $(OBJECTS) $(OBJECTASMS) $(OBJECTLIBS) $(OBJECTLIBS)
+	echo link -out:$@ $+ >&2; \
+	link $(LINKFLAGS) -out:$@ $+
+
+else ifeq (LIBRARY, $(TARGETTYPE))
+
+target: $(TARGET).lib
+$(TARGET).lib: $(OBJECTS) $(OBJECTASMS) $(OBJECTLIBS) $(OBJECTLIBS)
+	echo lib -out:$@ $+ >&2; \
+	lib $(LIBFLAGS) -out:$@ $+
+
+else ifneq (NONE, $(TARGETTYPE))
+$(error Invalid TARGETTYPE - $(TARGETTYPE))
+endif
+
+DEPENDS = $(SOURCES:%.c=%.dep)
+
+%.dep: %.c
+	@cl /E $(CLFLAGS) c:$< | \
+	grep '^#line 1 ' | sed "s!\\\\!/!g; s!//!/!g" | grep -i $(ROOTDIR) | \
+	sed 's!^.* !$(notdir $(<:.c=.obj)) $(notdir $(<:.c=.dep)): !; s!"!!g' | \
+	awk '{ p = length("$(ROOTDIR)"); c = substr($$3, p + 3); print $$1, $$2, "$$(ROOTDIR)" c }' | \
+	grep -vi war""ning: >$@; :
+
+depend: $(DEPENDS)
+
+-include *.dep
+

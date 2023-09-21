@@ -1,0 +1,699 @@
+test auto line number
+  - exit on two blankd
+  - exit on parse error
+  - exit on command error
+
+test reset!!!
+test autorun disable switch
+test debugger attached
+
+test baud command
+
+getchar test
+------------
+10 on getchar do print raw getchar
+20 halt
+
+10 on getchar do print raw getchar;
+
+input test
+----------
+10 dim a[3], b$[10]
+20 input a, b$
+30 print a, ",", b$
+run
+1
+(1 0 0 ,)
+run
+1 2 3 4 5
+(1 2 3 , 4 5)
+run
+1 2 3 4 5 6 7 8 9 0
+(trailing garbage)
+
+auto test
+---------
+auto
+rem
+rem
+(one blank)
+rem
+(two blank)
+list
+  10 rem
+  20 rem
+  40 rem
+auto
+xxx
+list
+  10 rem
+  20 rem
+  40 rem
+
+demo
+  30 dim i
+  40 while 1 do
+  50   for i = 1 to 16
+  60     let led = !led
+  70     sleep 50 ms
+  80   next
+  90   sleep 800 ms
+ 100 endwhile
+ 110 end
+demo1 (not for 5211 or CN)
+  25 dim data
+  26 data 1, 1, 2, 3, 5, 8, 13, 21, 0
+  90 sleep 1000 ms
+ 100 end
+ 110 sub receive
+ 120   print "received", rx
+ 130 endsub
+ 140 sub transmit
+ 150   read data
+ 160   if !data then
+ 170     return
+ 180   endif
+ 190   assert !tx
+ 200   print "sending", data
+ 210   let tx = data
+ 220 endsub
+demo2 (not for QE)
+51 while tx do
+52 endwhile
+53 print rx
+  15 configure uart 1 for 9600 baud 8 data no parity loopback
+  50 let tx = 3
+  60 let tx = 4
+  70 while tx do
+  80 endwhile
+  90 print rx
+ 100 print rx
+ 110 print rx
+ 120 end
+demo3
+  40 dim target, secs
+  50 data 5124, 6, 7460, 9, 8940, 3, -1, -1
+  60 configure timer 0 for 1000 ms
+  70 on timer 0 do gosub adjust
+  80 rem ---------------
+  90 while target!=-1 do
+ 100   sleep secs s
+ 110   read target, secs
+ 120 endwhile
+ 130 let relay = 0
+ 140 end
+ 150 sub adjust
+ 160   if thermocouple>=target then
+ 170     let relay = 0
+ 180   else
+ 190     let relay = 1
+ 200   endif
+ 210 endsub
+
+pic32 uart pio
+  10 configure timer 1 for 5 s
+  20 on timer 1 do gosub doit
+  30 rem ### uart pio ###
+  40 configure uart 1 for 9600 baud 8 data no parity loopback
+  60 dim b as byte
+  70 let b = 3
+  80 uart 1 write b
+  90 let b = 4
+ 100 uart 1 write b
+ 110 uart 1 read b
+ 120 print b
+ 130 uart 1 read b
+ 140 print b
+ 150 uart 1 read b
+ 160 end
+ 170 sub doit
+ 180   let b = 5
+ 190   uart 1 write b
+ 200 endsub
+should hang at end, and ctrl-c will work
+
+pic32 uart bug
+
+10 dim rx as pin rf4 for uart input
+20 dim tx as pin rf5 for uart output
+30  on uart 2 input do print rx
+40 configure uart 2 for 9600 baud 8 data no parity loopback
+45 dim i
+50 while 1 do
+60 let tx=i
+70  sleep 500 ms
+80 let i=i+1
+90 endwhile
+
+usb prints
+
+10 dim a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p
+20 dim ii,mm
+25 let mm = msecs
+30 for ii = 1 to 1000
+40 print a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p
+50 next
+60 print ii, "prints in", msecs-mm, "msecs"
+
+PIC32 CONFIG BITS CHECK
+  VERIFY THAT HEX FILES LOOK RIGHT FOR UBW AND CUI!
+
+cdc usb prints
+
+  10 dim i, j
+  20 let i = 1
+  30 while i>0 do
+  40   for j = 1 to 4
+50print"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa89",i
+  60     sleep 500 ms
+  70   next
+  80   let i = i*10
+  90 endwhile
+
+real toaster
+
+  10 dim target, secs
+  20 dim thermocouple as pin an0 for analog input
+  30 dim relay as pin an1 for digital output
+  40 dim buzzer as pin dtin3 for frequency output
+  50 data 512, 90, 746, 105, 894, 20, -1, -1
+  60 configure timer 0 for 1 s
+  70 configure timer 1 for 1 s
+  80 on timer 0 do gosub adjust
+  90 on timer 1 do gosub beep
+ 100 while target!=-1 do
+ 110   sleep secs s
+ 120   read target, secs
+ 130 endwhile
+ 140 let relay = 0
+ 150 end
+ 160 sub adjust
+ 170   if thermocouple>=target then
+ 180     let relay = 0
+ 190   else
+ 200     let relay = 1
+ 210   endif
+ 220 endsub
+ 230 sub beep
+ 240   let buzzer = thermocouple
+ 250   sleep 100 ms
+ 260   let buzzer = target
+ 270   sleep 100 ms
+ 280   let buzzer = 0
+ 290 endsub
+
+185 print thermocouple, target, relay
+
+15 dim led as pin ucts0* for digital output
+65 let led = 1
+85 let led = !led
+
+switches
+
+10 dim sw1 as pin irq7* for digital input debounced inverted
+20 on sw1 do print "sw1 pressed"
+30 sleep 1000 s
+
+  10 dim sw1 as pin ptg0 for digital input debounced inverted
+  20 on sw1 do print "sw1 pressed"
+  30 sleep 1000 s
+
+  10 dim sw1 as pin rd6 for digital input debounced inverted
+  20 on sw1 do print "sw1 pressed"
+  30 sleep 1000 s
+
+  10 dim sw1 as pin irq1* for digital input debounced inverted
+  20 on sw1 do print "sw1 pressed"
+  30 sleep 1000 s
+
+  10 dim sw1 as pin irq4* for digital input debounced inverted
+  20 on sw1 do print "sw1 pressed"
+  30 sleep 1000 s
+
+  10 dim sw1 as pin pta2 for digital input debounced inverted
+  20 on sw1 do print "sw1 pressed"
+  30 sleep 1000 s
+
+  10 dim sw1 as pin ptg7 for digital input debounced inverted
+  20 on sw1 do print "sw3 pressed"
+  30 sleep 1000 s
+
+  10 dim sw1 as pin fec_col for digital input debounced inverted
+  20 on sw1 do print "sw3 pressed"
+  30 sleep 1000 s
+
+audio
+
+  10 dim audio as pin urts1* for digital output
+  20 while 1 do
+  30   let audio = !audio
+  40 endwhile
+
+perf
+
+10 dim a
+20 configure timer 1 for 1 s
+30 on timer 1 do print a
+40 for a = 1 to 200000
+50 next
+save
+run
+profile
+
+  10 configure timer 0 for 1000 ms
+  20 on timer 0 do gosub delta
+  30 dim lasti, t, initial, i
+  32 let t = 200000, initial=ticks
+  35 print "first loop"
+  40 for i = 1 to t
+  50 next
+  60 rem abcdefghijklmnop
+  70 rem abcdefghijklmnop
+  80 rem abcdefghijklmnop
+  90 rem abcdefghijklmnop
+ 100 rem abcdefghijklmnop
+ 110 rem abcdefghijklmnop
+ 120 rem abcdefghijklmnop
+ 130 rem abcdefghijklmnop
+ 140 print "second loop"
+ 150 for i = t+1 to 2*t
+ 160 next
+161 print "third loop"
+162 while i < 3*t do
+163 let i=i+1
+164 endwhile
+ 165 print t*5/(ticks-initial), "lines/ms"
+ 170 end
+ 200 sub delta
+ 210   print i-lasti
+ 220   let lasti = i
+ 230 endsub
+
+41 rem
+42 rem
+43 rem
+44 rem
+151 rem
+152 rem
+153 rem
+154 rem
+165 print t*9/(ticks-initial), "lines/ms"
+
+timer resolution
+
+  10 dim ticks
+  20 configure timer 0 for 1 ms
+  30 on timer 0 do let ticks = ticks+1
+  40 sleep 1 s
+  50 print ticks
+
+upgrade (twice)
+clone
+relay/download
+prompt on/off, echo on/off
+line editing (edit command and normal)
+
+TEST QSPI EXAMPLE
+
+Morse code
+
+  10 dim audio as pin sda for digital output
+  20 dim i, letter, delay, morse[26] as byte
+  30 data 0x21, 0x48, 0x4a, 0x34
+  40 data 0x10, 0x42, 0x36, 0x40
+  50 data 0x20, 0x47, 0x35, 0x44
+  60 data 0x23, 0x22, 0x37, 0x46
+  70 data 0x4d, 0x32, 0x30, 0x11
+  80 data 0x31, 0x41, 0x33, 0x49
+  90 data 0x4b, 0x4c
+ 100 for i = 1 to 26
+ 110   read morse[i-1]
+ 120 next 
+125 label here
+ 130 data 19, 15, 19, -1
+ 140 while 1 do
+ 150   read letter
+ 160   if letter==-1 then
+ 170     sleep 1 s
+ 180     restore here
+ 190   else 
+ 200     gosub morse
+ 210   endif 
+ 220 endwhile 
+ 230 sub morse
+ 240   dim bits, bit
+ 250   let bits = (morse[letter-1]&0xf0)>>4
+ 260   assert bits
+ 270   for bit = 1 to bits
+ 280     if morse[letter-1]&1<<bit-1 then
+ 290       let delay = 200
+ 300     else 
+ 310       let delay = 100
+ 320     endif 
+ 330     gosub tone
+ 340     sleep 100 ms
+ 350   next 
+ 360   sleep 100 ms
+ 370 endsub 
+ 380 sub tone
+ 390   for i = 1 to delay
+ 400     let audio = !audio
+ 410     sleep 1 ms
+ 420   next 
+ 430 endsub 
+
+10 dim audio as pin dtin0 for frequency output
+ 380 sub tone
+ 390   let audio = 440
+ 400   sleep delay ms
+ 410   let audio = 0
+ 420
+ 430 endsub
+
+hello dolly
+
+  10 dim audio as pin dtin0 for frequency output
+  20 dim oct, freq
+  30 let freq = 440
+  40 while freq<10000 do
+  50   gosub octave
+  60   let freq = freq*2
+  70 endwhile
+  80 end
+  90 sub octave
+ 100   let audio = freq
+ 110   for oct = 1 to 8
+ 120     sleep 500 ms
+ 130     if oct==3||oct==7 then
+ 140       let audio = (audio*10595+5000)/10000
+ 150     else
+ 160       let audio = (audio*11225+5000)/10000
+ 170     endif
+ 180   next
+ 190   let audio = 0
+ 200   sleep 500 ms
+ 210 endsub
+
+dim xxx as pin sda for digital output
+
+dim a as pin dtin0 for analog output
+dim b as pin dtin1 for analog output
+dim c as pin dtin2 for analog output
+let a=250
+let b=750
+let c=1500
+
+dim a as pin ptf1 for analog output inverted
+dim b as pin pte2 for analog output inverted
+dim c as pin pte3 for analog output inverted
+let a=250
+let b=750
+let c=1500
+
+dim a as pin rd0 for analog output
+dim b as pin rd1 for analog output
+dim c as pin rd2 for analog output
+let a=250
+let b=750
+let c=1500
+
+dim a as pin ptc0 for analog output inverted
+dim b as pin ptc1 for analog output inverted
+dim c as pin ptc3 for analog output inverted
+let a=250
+let b=750
+let c=1500
+
+dim a as pin pte3 for analog output inverted
+dim b as pin pte5 for analog output inverted
+let a=250
+let b=750
+
+TEST SERVO OUTPUT!!!
+
+remote variables
+node1
+10 dim i as remote on nodeid 2
+20 for i = 1 to 8
+30 print i
+40 sleep 1 s
+50 next
+
+node2
+
+10 dim i
+20 dim lasti
+30 on i != lasti do gosub print
+40 sleep 1000 s
+50 end
+60 sub print
+70 print i
+80 let lasti = i
+90 endsub
+
+node1
+dim a[4] as remote on nodeid 2
+let a[3] = 3
+
+node2
+dim a[4] as byte
+print a[3]
+
+wireless led dimmer
+
+help about
+nodeid
+10 dim potentiometer as pin an0 for analog input
+20 dim led as remote on nodeid 2
+30 while 1 do
+40   let led = potentiometer
+50   sleep 100 ms
+60 endwhile
+save
+autorun on
+
+nodeid
+10 dim led as pin dtin0 for analog output
+20 while 1 do
+30 endwhile
+save
+autorun on
+
+node 2
+
+10 dim irq
+20 dim ack as remote on nodeid 1
+30 on irq do gosub caught
+40 while 1 do
+50 endwhile
+60 sub caught
+70   print "caught interrupt from node", irq
+80   let ack = 1
+90   let irq = 0
+100 endsub
+
+node 1
+
+10 dim ack
+20 dim irq as remote on nodeid 2
+30 let irq = nodeid
+40 do
+50 until ack
+60 print "acked!"
+70 let ack = 0
+
+  10 rem ### receiver ###
+  20 dim audio as pin dtin1 for frequency output
+  30 dim green as pin an0 for digital output inverted
+  40 dim blue as pin an1 for digital output inverted
+  50 dim red as pin an2 for digital output inverted
+  60 while 1 do
+  70 endwhile
+
+  10 rem ### transmitter ###
+  20 dim audio as remote on nodeid 8
+  30 dim green as remote on nodeid 8
+  40 dim blue as remote on nodeid 8
+  50 dim red as remote on nodeid 8
+  60 let audio = 500
+  70 configure timer 1 for 100 ms
+  80 on timer 1 do let audio = audio*12/11%10000
+  90 while 1 do
+ 100   let red = !red
+ 110   sleep 200 ms
+ 120   let blue = !blue
+ 130   sleep 200 ms
+ 140   let green = !green
+ 150   sleep 200 ms
+ 160 endwhile
+
+read ezport
+
+auto
+dim nrsti as pin scl for digital output
+dim ncs as pin qspi_cs0 for digital output
+dim cmd as byte, status as byte
+dim i, a0 as byte, a1 as byte, a2 as byte, buffer[64]
+rem pulse rsti* low with cs*
+let ncs = 0, nrsti = 0, nrsti = 1
+sleep 100 ms
+let ncs = 1
+rem send write enable command
+let cmd = 0x6
+let ncs = 0
+qspi cmd
+let ncs = 1
+rem send read status register command
+let cmd = 0x5
+let ncs = 0
+qspi cmd, status
+let ncs = 1
+print hex status
+rem send read data command
+let cmd = 0x3, a0 = 0, a1 = 0, a2 = 0
+let ncs = 0
+qspi cmd, a0, a1, a2, buffer
+let ncs = 1
+for i = 0 to 63 step 4
+print hex i, ":", buffer[i], buffer[i+1], buffer[i+2], buffer[i+3]
+next
+
+for qe short pin 24 to 26
+dim nrsti as pin pta7 for digital output
+dim ncs as pin ptb5 for digital output
+
+for qe, sda = 9, scl = 11
+
+for cn tower, scl=B74, sda=B75
+
+                  bump version     bump version
+                  debug            release
+                  wireless         upgrade
+                    connect        clone
+                    remote var     download
+                    not present    perf
+                  reset            help (!)
+                  autorun disable  cf and demos
+                  servo            usb host
+                  analog
+                  demos
+                  usb host
+                  serial connect
+
+MC9S08QE128-50
+
+MC9S12DT256-50
+
+MC9S12DP512-50
+
+MCF51QE128-50
+
+MCF51JM128-50
+
+Badge
+
+MCF521x-66
+
+MCF5222x-66
+
+old CPUStick
+
+MCF5223x-60
+
+MCF5225x-80
+
+DemoKit
+
+CPUStick
+
+PIC32MX3-80
+
+PIC32MX4-80 
+
+UBW32
+
+pin variable arrays -
+absolute variables -
+faster watchpoints, more watchpoints -
+faster usb host mode -
+var clear sets all pins to digital input -
+reset on 51qe/9s08qe/dp/dt
+stickos library
+decouple BASIC qspi cs from clone/zigbee
+elim qspi csiv
+add qspi_cs* pins config
+auto terminates on error
+numbers on/off -
+higher power zigbee
+
+                csum        perf        upgrade        reset
+
+52233
+
+52221
+
+5211
+
+51JM
+
+FB32
+
+Badge
+
+51CN
+
+51QE
+
+12DP
+
+12DT
+
+08QE
+
+  10 dim p[0] as pin qspi_clk for digital output
+  20 dim p[1] as pin qspi_dout for digital output
+  30 dim p[2] as pin qspi_din for digital output
+  40 dim p[3] as pin qspi_cs0 for digital output
+  50 dim p[4] as pin qspi_cs2 for digital output
+  60 dim p[5] as pin qspi_cs3 for digital output
+  70 dim p[6] as pin utxd2 for digital output
+  80 dim p[7] as pin urxd2 for digital output
+  90 dim p[8] as pin urts2* for digital output
+ 100 dim p[9] as pin ucts2* for digital output
+ 140 dim p[10] as pin irq1* for digital output
+ 150 dim p[11] as pin irq3* for digital output
+ 160 dim p[12] as pin irq5* for digital output
+ 170 dim p[13] as pin irq7* for digital output
+ 180 dim p[14] as pin utxd0 for digital output
+ 190 dim p[15] as pin urxd0 for digital output
+ 200 dim p[16] as pin urts0* for digital output
+ 210 dim p[17] as pin ucts0* for digital output
+ 220 dim p[18] as pin utxd1 for digital output
+ 230 dim p[19] as pin urxd1 for digital output
+ 240 dim p[20] as pin urts1* for digital output
+ 250 dim p[21] as pin ucts1* for digital output
+ 260 dim p[22] as pin dtin0 for digital output
+ 270 dim p[23] as pin dtin1 for digital output
+ 280 dim p[24] as pin dtin2 for digital output
+ 290 dim p[25] as pin dtin3 for digital output
+ 300 dim p[26] as pin scl for digital output
+ 310 dim p[27] as pin sda for digital output
+ 320 dim p[28] as pin an0 for digital output
+ 330 dim p[29] as pin an1 for digital output
+ 340 dim p[30] as pin an2 for digital output
+ 350 dim p[31] as pin an3 for digital output
+ 360 dim p[32] as pin an4 for digital output
+ 370 dim p[33] as pin an5 for digital output
+ 380 dim p[34] as pin an6 for digital output
+ 390 dim p[35] as pin an7 for digital output
+ 110 dim p[36] as pin gpt0 for digital output
+ 120 dim p[37] as pin gpt1 for digital output
+ 130 dim p[38] as pin gpt2 for digital output
+ 400 dim p[39] as pin gpt3 for digital output
+ 410 dim i
+ 420 while 1 do
+ 430   for i = 0 to 39
+ 440     let p[i] = !p[i]
+ 450   next
+ 460   sleep 50 ms
+ 470 endwhile

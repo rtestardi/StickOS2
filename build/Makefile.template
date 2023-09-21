@@ -1,0 +1,38 @@
+#@ template for user Makefiles in the rest of the tree
+
+# Makefiles may contain:
+#
+#   TARGET       = <target to be built, w/o extension>
+#   TARGETTYPE   = {PROGRAM|LIBRARY}
+#   SOURCES      = <source files, w/o directory names, w/ extensions>
+#   ASMS         = <assembly files, w/o directory names, w/ extensions>
+#   LCFS         = <linker files, w/o directory names, w/ extensions>
+#   LIBS         = <full path name to library files, w/o extensions>
+#   ALLCLEANS    = <intermediate files, in current directory>
+#   INCLUDES     = <full path names to additional include directories>
+#   DEFINES      = <additional #defines just for this directory>
+#
+# The target will be built in ./obj using sources in the current
+# directory, unless a source of the same name exists in one of the
+# $TARGET, $BUILD, $CPU, or $MODE directories.
+#
+# In LIBS, use $(ROOTDIR) and "obj" to specify the full path.
+# In INCLUDES, use $(ROOTDIR) to specify the full path.
+#
+# These variables are already set by build.sh before make runs:
+#
+#   TARGET       = (cpustick|skeleton|pict-o-crypt|flasher|sources|nichelite)
+#   BUILD        = (linux|windows|sourcery|cw6|cw7)
+#   CPU          = (MCF52221|MCF52233|MCF51JM128|BADGE_BOARD)
+#   MODE         = (DEBUG|RELEASE)
+#   ROOTDIR      = <full path to root of source tree>
+
+###############################################################################
+# WARNING DANGER BUGS WARNING DANGER BUGS WARNING DANGER BUGS WARNING DANGER  #
+# ***** no spaces allowed in path names to $(ROOTDIR) or in file names  ***** #
+###############################################################################
+
+# set SUBDIRS/TARGET/TARGETTYPE/SOURCES/LCFS/LIBS/ALLCLEANS/INCLUDES/DEFINES
+
+include $(ROOTDIR)/build/Makefile.def
+

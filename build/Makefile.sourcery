@@ -1,0 +1,88 @@
+###############################################################################
+# WARNING DANGER BUGS WARNING DANGER BUGS WARNING DANGER BUGS WARNING DANGER  #
+# ***** no spaces allowed in path names to $(ROOTDIR) or in file names  ***** #
+###############################################################################
+
+# build/Makefile.sourcery
+
+# tools location
+BIN_ROOT = m68k-elf-
+
+# compiler, linker, and tools.
+OBJCOPY = $(BIN_ROOT)objcopy
+OBJDUMP = $(BIN_ROOT)objdump
+CC = $(BIN_ROOT)gcc -pipe
+AS = $(CC) -x assembler-with-cpp
+
+ifeq (52221,$(findstring 52221,$(CPU)))
+PROC=52223
+else ifeq (52259,$(findstring 52259,$(CPU)))
+PROC=52259
+else
+$(error Invalid CPU - $(CPU))
+endif
+
+# compiler flags
+CCFLAGS = -g \
+          -ffunction-sections -Wl,-gc-sections \
+          -fomit-frame-pointer -fno-builtin -ffreestanding -fverbose-asm \
+          -march=isaaplus -Wa,--register-prefix-optional \
+          -mcpu=$(PROC) -malign-int \
+          $(foreach a,$(subst ., ,$(TARGET)),-D$(a)) \
+          $(foreach a,$(subst ., ,$(BUILD)),-D$(a)) \
+          $(foreach a,$(subst ., ,$(CPU)),-D$(a)) \
+          $(foreach a,$(subst ., ,$(MODE)),-D$(a)) \
+          $(DEFINES:%=-D%) \
+          $(foreach a,$(SOURCEDIRS:;= ),-I$(a))
+
+ifeq (RELEASE,$(findstring RELEASE,$(MODE)))
+CCFLAGS += -Os
+endif
+
+# linker flags
+LDFLAGS = -fno-builtin -nostdinc -nostdlib
+
+OBJECTS = $(SOURCES:%.c=%.o)
+OBJECTASMS = $(ASMS:%.s=%.o)
+OBJECTLIBS = $(LIBS:%=%.a)
+
+%.o: %.c
+	echo $(CC) -o $@ -c $< >&2; \
+	$(CC) $(CCFLAGS) -o $@ -c $<
+
+%.o: %.s
+	echo $(AS) -c $< -o $@ >&2; \
+	$(AS) $(CCFLAGS) -c $< -o $@
+
+%.s19: %.elf
+	echo $(OBJCOPY) -O srec --srec-forceS3 --srec-len=28 $< $@ >&2; \
+	$(OBJCOPY) -O srec --srec-forceS3 --srec-len=28 $< $@
+
+%.dump: %.elf
+	echo $(OBJDUMP) -xdsS $< >&2;\
+	$(OBJDUMP) -xdsS $< > $@
+
+ifeq (PROGRAM, $(TARGETTYPE))
+
+target: $(TARGET).elf $(TARGET).s19 $(TARGET).dump
+$(TARGET).elf: $(LCFS) $(OBJECTS) $(OBJECTASMS) $(OBJECTLIBS) $(OBJECTLIBS)
+	echo $(CC) -o $@ -T$+ >&2; \
+	$(CC) $(LDFLAGS) $(CCFLAGS) -o $@ -T$+
+
+else ifneq (NONE, $(TARGETTYPE))
+$(error Invalid TARGETTYPE - $(TARGETTYPE))
+endif
+
+DEPENDS = $(SOURCES:%.c=%.dep)
+
+%.dep: %.c
+	@$(CC) -E $(CCFLAGS) $< | \
+	grep '^# 1 ' | grep $(ROOTDIR) |  grep -v '//.$$' | \
+	sed 's!^.* "!$(notdir $(<:.c=.o)) $(notdir $(<:.c=.dep)): !; s!".*!!' | \
+	awk '{ p = length("$(ROOTDIR)"); c = substr($$3, p + 1); print $$1, $$2, "$$(ROOTDIR)" c }' | \
+	grep -vi war""ning: >$@; :
+
+depend: $(DEPENDS)
+
+-include *.dep
+

@@ -1,0 +1,12 @@
+TARGET=stickos
+TARGETTYPE=PROGRAM
+
+DEFINES=STICKOS
+
+SOURCES=w32main.c basic0.c parse2.c run2.c \
+        basic.c code.c parse.c run.c vars.c \
+        pin.c printf.c timer.c adc.c led.c \
+        sleep.c text.c util.c
+
+include $(ROOTDIR)/build/Makefile.def
+

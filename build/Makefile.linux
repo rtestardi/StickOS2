@@ -1,0 +1,61 @@
+###############################################################################
+# WARNING DANGER BUGS WARNING DANGER BUGS WARNING DANGER BUGS WARNING DANGER  #
+# ***** no spaces allowed in path names to $(ROOTDIR) or in file names  ***** #
+###############################################################################
+
+# build/Makefile.linux
+
+# compiler flags
+CFLAGS = -g \
+          -Werror \
+          -fno-builtin \
+          $(foreach a,$(subst ., ,$(TARGET)),-D$(a)) \
+          $(foreach a,$(subst ., ,$(BUILD)),-D$(a)) \
+          $(foreach a,$(subst ., ,$(CPU)),-D$(a)) \
+          $(foreach a,$(subst ., ,$(MODE)),-D$(a)) \
+          $(DEFINES:%=-D%) \
+          $(foreach a,$(SOURCEDIRS:;= ),-I$(a))
+
+ifeq (RELEASE,$(findstring RELEASE,$(MODE)))
+CFLAGS += -O
+endif
+
+# Generate 32 bit binaries, even when building on a 64 bit system.
+# CFLAGS += -m32
+
+# linker flags
+LDFLAGS =
+
+OBJECTS = $(SOURCES:%.c=%.o)
+OBJECTASMS = $(ASMS:%.s=%.o)
+OBJECTLIBS = $(LIBS:%=%.a)
+
+%.o: %.c
+	echo $(CC) -o $@ -c $< >&2; \
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+ifeq (PROGRAM, $(TARGETTYPE))
+
+target: $(TARGET)
+$(TARGET): $(LCFS) $(OBJECTS) $(OBJECTASMS) $(OBJECTLIBS) $(OBJECTLIBS)
+	echo $(CC) -o $@ $+ >&2; \
+	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ $+
+
+else ifneq (NONE, $(TARGETTYPE))
+$(error Invalid TARGETTYPE - $(TARGETTYPE))
+endif
+
+DEPENDS = $(SOURCES:%.c=%.dep)
+
+%.dep: %.c
+	@$(CC) -E $(CFLAGS) $< | \
+	grep '^# 1 ' | grep $(ROOTDIR) |  grep -v '//.$$' | \
+	sed 's!^.* "!$(notdir $(<:.c=.o)) $(notdir $(<:.c=.dep)): !; s!".*!!' | \
+	awk '{ p = length("$(ROOTDIR)"); c = substr($$3, p + 1); print $$1, $$2, "$$(ROOTDIR)" c }' | \
+	grep -vi war""ning: >$@; :
+
+depend: $(DEPENDS)
+
+-include *.dep
+
+

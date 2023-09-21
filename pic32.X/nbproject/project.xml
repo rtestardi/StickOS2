@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>com.microchip.mplab.nbide.embedded.makeproject</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/make-project/1">
+            <name>pic32</name>
+            <make-project-type>0</make-project-type>
+            <c-extensions>c</c-extensions>
+            <cpp-extensions/>
+            <header-extensions>h</header-extensions>
+            <sourceEncoding>UTF-8</sourceEncoding>
+            <asminc-extensions/>
+            <creation-uuid>4f7f8f1e-2f92-43be-abe4-8240c0840279</creation-uuid>
+            <make-dep-projects/>
+            <sourceRootList>
+                <sourceRootElem>..</sourceRootElem>
+            </sourceRootList>
+            <confList>
+                <confElem>
+                    <name>MX2</name>
+                    <type>2</type>
+                </confElem>
+                <confElem>
+                    <name>MK_GPK</name>
+                    <type>2</type>
+                </confElem>
+                <confElem>
+                    <name>MK_MCM</name>
+                    <type>2</type>
+                </confElem>
+            </confList>
+            <formatting>
+                <project-formatting-style>false</project-formatting-style>
+            </formatting>
+        </data>
+    </configuration>
+</project>

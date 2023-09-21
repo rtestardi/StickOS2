@@ -1,0 +1,110 @@
+#@ default Makefile included by all user Makefiles
+
+###############################################################################
+# WARNING DANGER BUGS WARNING DANGER BUGS WARNING DANGER BUGS WARNING DANGER  #
+# ***** no spaces allowed in path names to $(ROOTDIR) or in file names  ***** #
+###############################################################################
+
+# BUGS:
+#   * no spaces allowed in path names to $(ROOTDIR) or in file names
+
+# N.B. This Makefile will be invoked in one of three ways:
+#
+#      1) by the user in the source directory
+#         ($(CURDIR) == "")
+#      2) by a recursive invocation in a source directory
+#         ($(CURDIR) != "*/obj.*")
+#      3) by a recursive invocation in the object directory
+#         ($(CURDIR) == "*/obj.*")
+#
+# The actual (platform-dependent) build occurs in the object directory, and we
+# use VPATH to find our sources.
+
+MAKEFLAGS += --no-print-directory
+
+# we pass all arguments explicitly to sub-makes
+MAKEOVERRIDES =
+
+.PHONY: all depend target allclean depclean clean
+
+ifeq (obj.,$(findstring obj.,$(notdir $(CURDIR))))
+
+###############################################################################
+### object directory ##########################################################
+###############################################################################
+
+all: depend target
+
+# yacc files are rebuilt manually
+%.c: %.y
+
+.SUFFIXES:
+
+ifeq ($(PATHSEP),;)
+vpath %.c $(SOURCEDIRS)
+vpath %.C $(SOURCEDIRS)
+vpath %.s $(SOURCEDIRS)
+vpath %.lcf $(SOURCEDIRS)
+else
+vpath %.c $(SOURCEDIRS:;=:)
+vpath %.C $(SOURCEDIRS:;=:)
+vpath %.s $(SOURCEDIRS:;=:)
+vpath %.lcf $(SOURCEDIRS:;=:)
+endif
+
+include $(ROOTDIR)/build/Makefile.$(firstword $(subst ., ,$(BUILD)))
+
+else
+
+ifeq (,$(CURDIR))
+
+###############################################################################
+### user source directory #####################################################
+###############################################################################
+
+# fix issue with uppercase drive letter in win2k and symlinks in linux
+# N.B. this assignment is overridden by arguments explicitly passed to sub-makes
+CURDIR := $(shell $(SHELL) -c pwd -L)
+
+all clean depclean allclean list:
+	+@TARGET= TARGETTYPE= LCFS= SOURCES= LIBS= ALLCLEANS= INCLUDES= DEFINES= \
+	$(MAKE) CURDIR=$(CURDIR) -f $(CURDIR)/Makefile.$(TARGET) $@
+
+else
+
+###############################################################################
+### recursive source directory ################################################
+###############################################################################
+
+.PHONY: $(OBJDIR)
+
+all: $(OBJDIR)
+
+Makefile: ;
+
+$(OBJDIR):
+ifneq (,$(TARGET))
+	+@[ -d $@ ] || mkdir -p $@; \
+	$(MAKE) -C $@ CURDIR=$(CURDIR)/$@ -f $(CURDIR)/Makefile.$(TARGET) $(MAKECMDGOALS) >$@/make.log
+endif
+
+ifneq (obj.,$(findstring obj.,$(OBJDIR)))
+$(error Invalid OBJDIR - $(OBJDIR))
+endif
+
+clean:
+	rm -rf $(OBJDIR)
+
+depclean:
+	rm -f obj.*/*.dep
+
+allclean:
+	rm -rf obj.*
+
+list:
+	@echo $(CURDIR)
+
+endif  # $(CURDIR)
+
+endif  # $(OBJDIR)
+

@@ -1,0 +1,50 @@
+TARGET=cpustick
+TARGETTYPE=PROGRAM
+
+DEFINES=STICKOS
+
+ifeq (52233,$(findstring 52233,$(CPU)))
+LIBS=$(ROOTDIR)/nichelite/$(OBJDIR)/nichelite
+endif
+
+SOURCES=startup.c vectors.c main.c basic0.c cpustick.c parse2.c run2.c \
+        basic.c code.c parse.c run.c vars.c \
+        adc.c clone.c flash.c ftdi.c kbd.c lcd.c led.c pin.c printf.c i2c.c qspi.c scsi.c \
+        serial.c sleep.c terminal.c timer.c usb.c text.c util.c zigflea.c
+        
+ifeq (DEMO_KIT,$(findstring DEMO_KIT,$(CPU)))
+SOURCES += bootload.c
+endif
+
+ifeq (BADGE_BOARD,$(findstring BADGE_BOARD,$(CPU)))
+SOURCES += bootload.c jm.c
+endif
+
+ifeq (52259,$(findstring 52259,$(CPU)))
+SOURCES += block.c fat32.c
+endif
+
+ifeq (52233,$(findstring 52233,$(CPU)))
+LCFS=52233.lcf
+else ifeq (52221,$(findstring 52221,$(CPU)))
+LCFS=52221.lcf
+else ifeq (52259,$(findstring 52259,$(CPU)))
+ifeq (DEMO_KIT,$(findstring DEMO_KIT,$(CPU)))
+LCFS=demokit.lcf
+else
+LCFS=52259.lcf
+endif
+else ifeq (5211,$(findstring 5211,$(CPU)))
+LCFS=5211.lcf
+else ifeq (BADGE_BOARD,$(findstring BADGE_BOARD,$(CPU)))
+LCFS=badge.lcf
+else ifeq (51JM128,$(findstring 51JM128,$(CPU)))
+LCFS=51JM128.lcf
+else ifeq (51QE128,$(findstring 51QE128,$(CPU)))
+LCFS=51QE128.lcf
+else
+$(error Invalid CPU - $(CPU))
+endif
+
+include $(ROOTDIR)/build/Makefile.def
+

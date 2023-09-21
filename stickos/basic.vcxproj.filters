@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="cpustick">
+      <UniqueIdentifier>{c435be00-6b63-45a5-aa96-8f4b8d0f0856}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources">
+      <UniqueIdentifier>{f2f9249b-0886-4824-a596-d48d739eccfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="stickos">
+      <UniqueIdentifier>{d6e1ea58-0213-4aa3-b825-17cf77fb9058}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test">
+      <UniqueIdentifier>{e7d7a765-f29b-4744-96c4-1fd74cd8fea9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="build">
+      <UniqueIdentifier>{6c9a1ade-8af0-4ab5-a079-a5d911161658}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\cpustick\basic0.c">
+      <Filter>cpustick</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cpustick\parse2.c">
+      <Filter>cpustick</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cpustick\run2.c">
+      <Filter>cpustick</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\adc.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\led.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\pin.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\text.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\timer.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources\util.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="basic.c">
+      <Filter>stickos</Filter>
+    </ClCompile>
+    <ClCompile Include="code.c">
+      <Filter>stickos</Filter>
+    </ClCompile>
+    <ClCompile Include="parse.c">
+      <Filter>stickos</Filter>
+    </ClCompile>
+    <ClCompile Include="run.c">
+      <Filter>stickos</Filter>
+    </ClCompile>
+    <ClCompile Include="vars.c">
+      <Filter>stickos</Filter>
+    </ClCompile>
+    <ClCompile Include="w32main.c" />
+    <ClCompile Include="..\sources\printf.c">
+      <Filter>sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\cpustick\basic0.h">
+      <Filter>cpustick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpustick\parse2.h">
+      <Filter>cpustick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpustick\run2.h">
+      <Filter>cpustick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\adc.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\led.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\pin.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\text.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\timer.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sources\util.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="basic.h">
+      <Filter>stickos</Filter>
+    </ClInclude>
+    <ClInclude Include="code.h">
+      <Filter>stickos</Filter>
+    </ClInclude>
+    <ClInclude Include="parse.h">
+      <Filter>stickos</Filter>
+    </ClInclude>
+    <ClInclude Include="run.h">
+      <Filter>stickos</Filter>
+    </ClInclude>
+    <ClInclude Include="vars.h">
+      <Filter>stickos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\main.h" />
+    <ClInclude Include="..\sources\printf.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\config.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\test\basic.sh">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\test\basic.txt">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\test\basic2.sh">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\test\basic2.txt">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\test\basic3.sh">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\test\basic3.txt">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\test\test.sh">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\test\test2.sh">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\test\test3.sh">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\build\Makefile.def">
+      <Filter>build</Filter>
+    </None>
+    <None Include="..\build\Makefile.windows">
+      <Filter>build</Filter>
+    </None>
+    <None Include="..\bugs.txt" />
+    <None Include="..\build.sh" />
+    <None Include="..\review.sh" />
+  </ItemGroup>
+</Project>
