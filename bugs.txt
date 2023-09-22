@@ -7,6 +7,7 @@ board:
   compare to bs50!
 
 todo html:
+  horizontal scrolling of trace on chromebook does not work
   calibration values stored in flash?
   add webusb auto load, allow usb stall, https://developer.chrome.com/articles/build-for-webusb/
   allow "measure" button to drag crosshairs (rather than place dot)
