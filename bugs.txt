@@ -8,7 +8,6 @@ board:
 
 todo html:
   horizontal scrolling of trace on chromebook does not work
-  on surface go, screen width seems to be less than 1870 -- more like 1024?
   calibration values stored in flash?
   add webusb auto load, allow usb stall, https://developer.chrome.com/articles/build-for-webusb/
   allow "measure" button to drag crosshairs (rather than place dot)
