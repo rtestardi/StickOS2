@@ -4,6 +4,7 @@ https://makezine.com/
 
 board:
   for qfp, replace pic32 and remove mask from flag in pcb
+  make 2-pin power supply jumpers also offset
   compare to bs50!
 
 todo html:
