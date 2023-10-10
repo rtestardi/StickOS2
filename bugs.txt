@@ -4,20 +4,21 @@ https://makezine.com/
 
 board:
   for qfp, replace pic32 and remove mask from flag in pcb
+  consider adding selectable input prescalers?
   make 2-pin power supply jumpers also offset
-  compare to bs50!
 
 todo html:
-  horizontal scrolling of trace on chromebook does not work
+  horizontal scrolling of trace on chromebook does not work :-(
   calibration values stored in flash?
   add webusb auto load, allow usb stall, https://developer.chrome.com/articles/build-for-webusb/
   allow "measure" button to drag crosshairs (rather than place dot)
+  have measure divisions for manual clock recovery
   allow display resize
   sample grid for manual clock recovery!
   (persistent) labels for binary bits?
   should we have an option for deep scrollable capture, using all of ram?
-  fft display?
-  option to export raw data?
+  deeper trace and fft display?
+  option to export/import raw data?
   cal_zero should be cal_gnd?
   should we have two separate line segments on oor so we don't show red coming up or down the trace?
   need js functions to go forard and backward, and tests that they are reversible!
@@ -40,58 +41,21 @@ toto StickOS:
   pullups for all unused/disconnected pins -- not near analog sample pins!!!
   rc10 should be driven low when wave is not in use
   heartbeat led does not blink while waiting for trigger (well, yeah)
-  80 character line limit?
+  pause all usb for 1 second when waiting for trigger (delayed ctrl-c)?
+  get rid of 80 character line limit?
 
-sparkfun vid???
-
-write full internals doc for class!
-
-VIDEO!!!
-
-clear
-configure uart 1 for 9600 baud 8 data no parity
-dim a as byte, b as byte
-a=55
-uart 1 write a
-uart 1 read b
-print b
-
-clear
-configure uart 2 for 9600 baud 8 data no parity
-dim a as byte, b as byte
-a=77
-uart 2 write a
-uart 2 read b
-print b
-
-turn rb12 high output on dm mini to enable 3.3v on UEXT.
-
-make all parts support 20 scopes (rather than 10).
-
+toto SickOS general:
 allow gosub to use string expression instead of a label -- gosub state$
-
 add "eval" command?  add case/switch command?
-
 allow heartbeat and safemode* on same pin!
-
 get rid of all code in #defines -- esp ?: and such for flash generations
 get rid of all (*xxx)++ references
 uniq -d long lines (if, else, while, etc.)
 merge const parsing
-replace all switch statements out of performance path with if-elseif
-
 allow upper case letters in hex addresses.
-
 turn off pcache for pic32; disable interrupts while talking to spi/i2c; see eratta
-
-change duinomite pin names to match silkscreens (and fb32/chipKIT), change help pins, change default "pins" to remove zigflea and move safemode, change default heartbeat led
-add stickos library versions that use all 512k for pic32 just like for CFV2 -- make an official part of the skeleton project!
-
 data_image_begin is wrong for pic32 -- we have to use address after ramfunc images as the end of code!
-
 add "upload" command to turn BASIC programs into S19/HEX...
-
-I was hoping "ipaddress" would tell me what it got but that seems to just report "dhcp" or whatever static address was assigned.
 
 // bugs
 // ====
@@ -114,22 +78,15 @@ end
 // make run_var() extern and add to run.h!
 // add windows/linux build to skeleton project
 // "step" and "trace" should be statements, not commands!
-// remove 4 pwm assignments from 5225x online help
-// add "lcd init" statement...
 // configure/on timer (n) should be able to take variables for (n)
 // you can't copy keychar$ with "let temp$=keychar$", since there are three nul-bytes on big-endian memory in start of keychar$! (doc error!)
 // # on string should still return max len -- @ should return consumed length! (or swap!)
 // can we allocate more ram to pic32/5225x (ram page size)?  how close are we?
-// add qspi and i2c pin assignments to online help (data, clk, cs)
 // add to help pins all "unchangable" pins (i2c, spi, etc.) from freescale.pdf and microchip.pdf
-// add help for uno32 LED on pin 43
-// disable kbd pins for fb32 nano/mini
 // eliminate restrictions on "analog" mode values.  "servo", too?
 // add "configure qspi baud (n) mode (0-3)"
 // add "configure i2c baud (n)"
 // allow "library" sub in "library" to create global variables somehow.  call this by convention to initialize library.
-// fix cpustick.inf to pass chkinf!
-// fix CFV1 to tolerate uart overruns on rx, just like pic32; CFV2 might need help, too, so you don't have to reconfigure.
 // allow you to set stop bits in the "configure" statement; switch all to 1 stop bit!
 // stickos should report uart framing errors and overrun errors more gracefully!  on uart 1 error do gosub recover
 // I should probably allow "as byte" or "as word" on pin variables, but I don't currently.
@@ -137,26 +94,17 @@ end
 // fix checksum to be compatible/consistent with bootloader (pic32 and freescale)
 // pins should survive upgrade; same for nodeid, ipaddress, etc.
 // do we want BASIC to have control over pull-ups?  thru a mode variable?
-// why does jm upgrade show diff checksum (by 0x5a?) than program from cw?
 // multi-pin variables (digital I/O only, using binary integer)!!!
 // add packed save/load commands!!!; make flash filesystem allocate only as much space as is needed to save a current program!
-// mode to disable usb device (and autorun disable to override)
-// move block.c and fat32.c from pict-o-crypt to sources (include in skeleton)
 // on/off/mask/unmask should move to parse2.c/run2.c
-// 9s12 and others need to reset timer counter when increasing frequency output -- see "wrap"
 // Ctrl-E to dump all variables while basic program is running?
 // add ability to get stack trace with locals from all frames
-// add a faster zigflea option for pic32/5225x!
 // test i2c with sda, scl, sda and acl all tied to ground -- no hangs or crashes.
-// zigbee read remote variables
 
 // doc
 // ===
-// remove gpt0-3 as pwm for 5225x, etc., in online help!
 // add getchar example in ug?  don't use getchar$
 // remove refs to keychar$ and getchar$!
-// add fslbot example to user's guide?
-// change VBUS to +5V in schematic
 // add digital input and analog output example
 // add minimum flash requirements for pic32 and 5225x to mcu details
 // document "conflicting timer usage"
