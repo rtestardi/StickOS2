@@ -8,6 +8,7 @@ board:
   make 2-pin power supply jumpers also offset
 
 todo html:
+  consider setting ADC to 12 bit mode for all but highest sample rates, to get 4 mV vertical resolution
   horizontal scrolling of trace on chromebook does not work :-(
   calibration values stored in flash?
   add webusb auto load, allow usb stall, https://developer.chrome.com/articles/build-for-webusb/
