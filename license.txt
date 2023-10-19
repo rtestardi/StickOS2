@@ -12,7 +12,7 @@ The binary/hex files (like "pic32.X.27.production.hex") and board/gerber files i
 in the public domain.  Please use at your own risk!
 
 "pic32.X.27.production.hex" and the instance of StickOS contained therein is released under a free, irrevocable,
-perpetual license to U.S. Patent 8,117,587 for personal, educational, or non-commercial purposes.  This version
+perpetual license to U.S. Patent 8,117,587 for personal, educational, or non-commercial purposes.  This instance
 of StickOS is released "as-is" with no warranty of merchantability and no warranty of fitness for any purpose.
 This license shall not be implied to cover any future releases of StickOS which are not expressly released under
 such a license.
