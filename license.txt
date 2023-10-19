@@ -1,0 +1,20 @@
+Everything here is Copyright (c) Richard Testardi, 2008-2023.  All rights reserved.  Patent U.S. 8,117,587.
+
+The source files in the "stickos" directory (basic.c, code.c, parse.c, run.c, and vars.c) are protected by U.S.
+Patent 8,117,587, and are Copyright (c) CPUStick.com, 2008-2023.  All rights reserved.  Contact me if you want
+to use them commercially.
+
+The remaining source files (basic0.c, cpustick.c, help.c, parse2.c, run2.c, scope.c, adc.c, cdcacm.c, flash.c,
+i2c.c, led.c, pin.c, printf.c, qspi.c, serial.c, terminal.c, text.c, timer.c, usb.c, util.c, zigflea.c, main.c,
+myplib.c) are in the public domain, and you can use them however you want.
+
+The binary/hex files (like "pic32.X.27.production.hex") and board/gerber files in the "board" directory are also
+in the public domain.  Please use at your own risk!
+
+"pic32.X.27.production.hex" and the instance of StickOS contained therein is released under a free, irrevocable,
+perpetual license to U.S. Patent 8,117,587 for personal, educational, or non-commercial purposes.  This version
+of StickOS is released "as-is" with no warranty of merchantability and no warranty of fitness for any purpose.
+This license shall not be implied to cover any future releases of StickOS which are not expressly released under
+such a license.
+
+rtestardi@live.com
