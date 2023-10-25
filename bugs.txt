@@ -7,6 +7,9 @@ board:
   consider adding selectable input prescalers?
   make 2-pin power supply jumpers also offset
 
+todo arch:
+  move calibration from webpage to firmware, so "scope" returns calibrated data directly
+
 todo html:
   calibration values should not be stored if outside expected range
   allow "measure" button to drag crosshairs (rather than place dot)
