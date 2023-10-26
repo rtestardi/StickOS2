@@ -29,6 +29,7 @@ todo html:
 
 toto StickOS:
   flash checksum
+  scope should have all interrupts (even usb) disabled for the first 500ms of trigger
   add webusb auto load, allow usb stall, https://developer.chrome.com/articles/build-for-webusb/
   on i2c reset do xxx (possibly just continue)
   add ms usb descriptor
