@@ -6,6 +6,7 @@ board:
   for qfp, replace pic32 and remove mask from flag in pcb
   consider adding selectable input prescalers?
   make 2-pin power supply jumpers also offset
+  move switches so no interference when bnding panel board to separate?  move mlcc's farther from board edge?
 
 todo arch:
   move calibration from webpage to firmware, so "scope" returns calibrated data directly
