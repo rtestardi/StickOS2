@@ -153,6 +153,9 @@ bool debugger_attached;
 // N.B. big_buffer may not be aligned; it is up to the caller to align it if needed.
 byte big_buffer[768];
 
+extern int (_ebase_address)();
+extern int (_on_bootstrap)();
+
 int
 main()  // we're called directly by startup.c
 {
@@ -259,7 +262,7 @@ main()  // we're called directly by startup.c
     bus_frequency = 40000000;
 #endif
 
-    //end_of_static = _data_image_begin;
+    end_of_static = (byte *)FLASH_START + (_on_bootstrap-_ebase_address);
 
     // if pin_assignment_safemode is asserted on boot, skip autorun
     pin_initialize();
