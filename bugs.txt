@@ -6,10 +6,10 @@ board:
   for qfp, replace pic32 and remove mask from flag in pcb
   consider adding selectable input prescalers?
   make 2-pin power supply jumpers also offset
-  move switches so no interference when bnding panel board to separate?  move mlcc's farther from board edge?
+  move switches so no interference when bending panel board to separate?  move mlcc's farther from board edge?
 
 todo arch:
-  move calibration from webpage to firmware, so "scope" returns calibrated data directly
+  move calibration from webpage to firmware, so "scope" returns calibrated data directly and trigger levels use calibrated data
 
 todo html:
   calibration values should not be stored if outside expected range
@@ -25,7 +25,6 @@ todo html:
   cal_zero should be cal_gnd?
   should we have two separate line segments on oor so we don't show red coming up or down the trace?
   need js functions to go forard and backward, and tests that they are reversible!
-  controls -- maybe ditch b0?
   aliasing at right and left vertical marker vs. signal
 
 toto StickOS:
