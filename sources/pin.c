@@ -2014,6 +2014,8 @@ pin_uart_configure(int uart, int baud, int data, byte parity, bool loopback)
     int divisor;
 
     if (! uart) {
+        U1MODE &= ~_U1MODE_UARTEN_MASK;
+
         divisor = bus_frequency/baud/16;
         if (divisor >= 0x10000) {
             divisor = 0xffff;
@@ -2024,6 +2026,8 @@ pin_uart_configure(int uart, int baud, int data, byte parity, bool loopback)
 
         U1STA = _U1STA_URXEN_MASK|_U1STA_UTXEN_MASK;
     } else {
+        U2MODE &= ~_U2MODE_UARTEN_MASK;
+
         divisor = bus_frequency/baud/16;
         if (divisor >= 0x10000) {
             divisor = 0xffff;
