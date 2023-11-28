@@ -462,7 +462,7 @@ basic_run(char *text_in)
                     // see if this might be a basic line executing directly
                     if (parse_line(text, &length, bytecode, &syntax_error)) {
                         // if this line is not allowed in immediate mode...
-                        if (*bytecode == code_input) {
+                        if (*bytecode == code_input || *bytecode == code_i2c || *bytecode == code_uart || *bytecode == code_qspi) {
                             printf("not allowed\n");
                         } else {
                             // run the bytecode
