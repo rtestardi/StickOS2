@@ -79,7 +79,7 @@ const char * const help_about =
 #endif
 "Copyright (c) 2008-2023; all rights reserved.  Patent U.S. 8,117,587.\n"
 "https://github.com/rtestardi/StickOS2\n"
-"rtestardi at live.com\n"
+"rtestardi@live.com\n"
 ;
 
 

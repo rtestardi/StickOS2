@@ -657,7 +657,10 @@ pin_declare_internal(IN int pin_number, IN int pin_type, IN int pin_qual, IN boo
             offset = 10 + pin_number - PIN_B3;
             assert(offset >= 10 && offset <= 15);
             CNPUBCLR = 1 << offset;
-            if (pin_type == pin_type_digital_input) {
+            if (pin_type == pin_type_uart_input || pin_type == pin_type_uart_output) {
+                ANSELBCLR = 1 << offset;
+                TRISBSET = 1 << offset;
+            } else if (pin_type == pin_type_digital_input) {
                 ANSELBCLR = 1 << offset;
                 CNPUBSET = 1 << offset;
                 TRISBSET = 1 << offset;
@@ -1326,12 +1329,17 @@ pin_set(IN int pin_number, IN int pin_type, IN int pin_qual, IN int32 value)
         case PIN_B7:
         case PIN_B8:
             // RB
-            offset = 10 + pin_number - PIN_B3;
-            assert(offset >= 10 && offset <= 15);
-            if (value) {
-                LATBSET = 1 << offset;
+            if (pin_type == pin_type_uart_output) {
+                assert(pin_number == PIN_B7 || pin_number == PIN_B8);
+                pin_uart_tx(pin_number == PIN_B7, value);
             } else {
-                LATBCLR = 1 << offset;
+                offset = 10 + pin_number - PIN_B3;
+                assert(offset >= 10 && offset <= 15);
+                if (value) {
+                    LATBSET = 1 << offset;
+                } else {
+                    LATBCLR = 1 << offset;
+                }
             }
             break;
         case PIN_E1:
@@ -1776,13 +1784,21 @@ pin_get(IN int pin_number, IN int pin_type, IN int pin_qual)
         case PIN_B7:
         case PIN_B8:
             // RB
-            offset = 10 + pin_number - PIN_B3;
-            assert(offset >= 10 && offset <= 15);
-            if (pin_qual & 1<<pin_qual_debounced) {
-                assert(pin_type == pin_type_digital_input);
-                value = pin_get_digital_debounced(port_b, offset);
+            if (pin_type == pin_type_uart_input) {
+                assert(pin_number == PIN_B4 || pin_number == PIN_B6);
+                value = pin_uart_rx(pin_number == PIN_B4);
+            } else if (pin_type == pin_type_uart_output) {
+                assert(pin_number == PIN_B7 || pin_number == PIN_B8);
+                value = pin_uart_tx_empty(pin_number == PIN_B7)?0:ulasttx[pin_number == PIN_B7];
             } else {
-                value = !! (PORTB & 1 << offset);
+                offset = 10 + pin_number - PIN_B3;
+                assert(offset >= 10 && offset <= 15);
+                if (pin_qual & 1<<pin_qual_debounced) {
+                    assert(pin_type == pin_type_digital_input);
+                    value = pin_get_digital_debounced(port_b, offset);
+                } else {
+                    value = !! (PORTB & 1 << offset);
+                }
             }
             break;
         case PIN_E1:

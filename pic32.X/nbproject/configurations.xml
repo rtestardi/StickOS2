@@ -1709,7 +1709,7 @@
         <property key="memories.programmemory.ranges" value="1d000000-1d0fffff"/>
         <property key="poweroptions.powerenable" value="false"/>
         <property key="programmerToGoFilePath"
-                  value="C:/Temp/StickOS2/pic32.X/debug/MK_MCM/pic32_ptg"/>
+                  value="C:/Temp/StickOS2/pic32.X/debug/MK/pic32_ptg"/>
         <property key="programmerToGoImageName" value="pic32_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
