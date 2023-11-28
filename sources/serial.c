@@ -223,7 +223,7 @@ serial_uninitialize(void)
     // Unconfigure UART2 RX Interrupt
     IEC1CLR = _IEC1_U2RXIE_MASK;
 #else
-    U1MODE |= _U1MODE_UARTEN_MASK;
+    U1MODE &= ~_U1MODE_UARTEN_MASK;
 
     // Unconfigure UART2 RX Interrupt
     IEC1CLR = _IEC1_U1RXIE_MASK;
