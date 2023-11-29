@@ -791,7 +791,7 @@ see also:
 Welcome to StickOS for Microchip PIC32MK0512GPK v2.27!
 Copyright (c) 2008-2023; all rights reserved.  Patent U.S. 8,117,587.
 https://github.com/rtestardi/StickOS2
-rtestardi at live.com
+rtestardi@live.com
 <Ctrl-C>                      -- stop program
 auto <line>                   -- automatically number program lines
 clear [flash]                 -- clear ram [and flash] variables
