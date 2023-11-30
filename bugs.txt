@@ -1,6 +1,5 @@
-https://hackaday.com/submit-a-tip/
-https://www.instructables.com/
-https://makezine.com/
+history:
+  v2.27b (0x45bf) adds boot checksum, fixes flash upgrade, implements uart pin vars
 
 board:
   for qfp, replace pic32 and remove mask from flag in pcb
@@ -22,22 +21,20 @@ todo html:
   should we have an option for deep scrollable capture, using all of ram?
   deeper trace and fft display?
   option to export/import raw data?
-  cal_zero should be cal_gnd?
   should we have two separate line segments on oor so we don't show red coming up or down the trace?
-  need js functions to go forard and backward, and tests that they are reversible!
+  need js functions to go forward and backward from calibration, and tests that they are reversible!
   aliasing at right and left vertical marker vs. signal
 
 toto StickOS:
-  flash checksum
-  scope should have all interrupts (even usb) disabled for the first 500ms of trigger
+  scope should have all interrupts (even usb) disabled for the first 1000ms of trigger (delayed ctrl-c)
   add webusb auto load, allow usb stall, https://developer.chrome.com/articles/build-for-webusb/
-  on i2c reset do xxx (possibly just continue)
   add ms usb descriptor
+  on i2c reset do xxx (possibly just continue)
   allow pin names in upper or lower case
   remove zigflea -- nodeid, remote variables, etc.
   get rid of cpustick/stickos/sources layers
   change all use of MASK to bits!
-  mass storage ***
+  implement multi-function mass storage to store flea-scope.html locally
   overclock if s1 not pressed on boot?  20 Msps?
   download and clone?
   test "out of variables"
@@ -45,20 +42,17 @@ toto StickOS:
   pullups for all unused/disconnected pins -- not near analog sample pins!!!
   rc10 should be driven low when wave is not in use
   heartbeat led does not blink while waiting for trigger (well, yeah)
-  pause all usb for 1 second when waiting for trigger (delayed ctrl-c)?
   get rid of 80 character line limit?
 
 toto SickOS general:
 allow gosub to use string expression instead of a label -- gosub state$
 add "eval" command?  add case/switch command?
-allow heartbeat and safemode* on same pin!
+allow heartbeat and safemode* on same pin (resistor with switch)!
 get rid of all code in #defines -- esp ?: and such for flash generations
 get rid of all (*xxx)++ references
 uniq -d long lines (if, else, while, etc.)
 merge const parsing
 allow upper case letters in hex addresses.
-turn off pcache for pic32; disable interrupts while talking to spi/i2c; see eratta
-data_image_begin is wrong for pic32 -- we have to use address after ramfunc images as the end of code!
 add "upload" command to turn BASIC programs into S19/HEX...
 
 // bugs
@@ -83,10 +77,7 @@ end
 // add windows/linux build to skeleton project
 // "step" and "trace" should be statements, not commands!
 // configure/on timer (n) should be able to take variables for (n)
-// you can't copy keychar$ with "let temp$=keychar$", since there are three nul-bytes on big-endian memory in start of keychar$! (doc error!)
 // # on string should still return max len -- @ should return consumed length! (or swap!)
-// can we allocate more ram to pic32/5225x (ram page size)?  how close are we?
-// add to help pins all "unchangable" pins (i2c, spi, etc.) from freescale.pdf and microchip.pdf
 // eliminate restrictions on "analog" mode values.  "servo", too?
 // add "configure qspi baud (n) mode (0-3)"
 // add "configure i2c baud (n)"
@@ -95,7 +86,6 @@ end
 // stickos should report uart framing errors and overrun errors more gracefully!  on uart 1 error do gosub recover
 // I should probably allow "as byte" or "as word" on pin variables, but I don't currently.
 // get rid of parse2/run2/basic0 if we make stickos source public?
-// fix checksum to be compatible/consistent with bootloader (pic32 and freescale)
 // pins should survive upgrade; same for nodeid, ipaddress, etc.
 // do we want BASIC to have control over pull-ups?  thru a mode variable?
 // multi-pin variables (digital I/O only, using binary integer)!!!
@@ -121,12 +111,9 @@ end
 // expose erase_page and write_word to basic to manipulate other half of flash!
 // allow input of negative numbers
 // give vprint ability to do sign extension?
-// add configurable file name for usb host mode
 // consider doing servos in sw w/ lightweight isr rather than using hw timers
 // add "modes" to turn off USB and QSPI and get their pins back for gpio
 // saw bug changing pic32 pin from servo to freq mode on fly?
-// pwm: 9s12 and cfv2 can do 4 16 bit channels!
-// spi-to-sd card data logging
 // how to enable different uart selection (other than lowest number) for console?
 // we need a way to prevent you from upgrading the wrong firmware file!!!
 // if data area of flash looks bogus on boot, we should clear it all!
@@ -134,46 +121,23 @@ end
 // add zigbee channel; save zigbee channel in nvparam!
 // need a second catalog page for safe updates!
 // handle uart errors (interrupt as well as poll)
+// prompt on|off|ok
 
 // prior 3
 // =======
-// PC/Cell framework!!!
-// add mst interface for basic progs and fw access, also inf file access
-// add zigbee support thru xbee for ubw32?
-// prompt on|off|ok
-// get rid of remaining SPL_USB, SPL_IRQ4, etc.
-// get rid of rtc isr remap on jm/qe
-// if dhcp not found on 33, assign random ip compatible with windows?
-// figure out usb "pop" on first badge run -- is that the badge issue?
-
-// prior 4
-// =======
 // can we make sub/endsub block behave more like for/next, from error and listing perspective?
-// allow broadcast/remote nodeid setting (with switch), like pagers
 // short circuit && and || operators
 // multiple (main) threads?
-// "on usb [connect|disconnect]" statement for slave mode!
 // ?: operator!
-// add support for comments at the end of lines '?  //?
 // switch statement (on xxx goto...?)
 // allow gosub from command line?
 // sub stack trace?  (with sub local vars?)
 // one line "if <expression> then <statement> [else <statement>]"
-// optional "let" statement
 // sleeps and timers don't work with single-stepping
 // core dump -- copy ram to secondary code flash on assert/exception/halt?
-
-// v2.0
-// ====
-// generic programmable i2c/spi/uart/ethernet/cdc (host and device) gateway
-// make console virtual uart a first class citizen!!!
-// separate os from stickos; allow non 50/50 flash split
 // allow basic isrs to run while waiting for uart or i2c receive data (anywhere we allow ctrl-c)
-// separate os from stickos; allow non 50/50 flash split
-// turn stickos into a generic programmable uart/usbcdc/ethernet/spi/i2c gateway
 // get rid of basic0/basic2, parse0/parse2, run0/run2, etc. -- save lots of code!  release core source???
 // handle all uart rx/tx in isrs; have basic statements feed isrs
-// get rid of uart pin vars for pic32!  for all???
 
 // perf
 // ====
