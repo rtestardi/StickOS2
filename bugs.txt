@@ -11,6 +11,7 @@ test:
   spi ledstrip
   all pins analog and digital and pwm
   flash upgrade to debug and -g and back
+  test windows, linux, android, mac, chromebook
 
 board:
   for qfp, replace pic32 and remove mask from flag in pcb
