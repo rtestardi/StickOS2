@@ -262,7 +262,7 @@ main()  // we're called directly by startup.c
     bus_frequency = 40000000;
 #endif
 
-    end_of_static = (byte *)FLASH_START + (_on_bootstrap-_ebase_address);
+    end_of_static = (byte *)_on_bootstrap;
 
     // if pin_assignment_safemode is asserted on boot, skip autorun
     pin_initialize();

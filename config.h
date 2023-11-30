@@ -1,6 +1,7 @@
 // *** config.h *******************************************************
 
 #ifndef CONFIG_INCLUDED
+#define CONFIG_INCLUDED  1
 
 #define FLASH_START  0x9D000000
 
