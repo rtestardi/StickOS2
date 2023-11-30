@@ -50,12 +50,7 @@ adc_timer_poll(bool debouncing)
     ADCCON3bits.GSWTRG = 1;
 
 #else
-    for (i = 0; i < adc_num_channel; i++) {
-        adc_result[i] = ReadADC10(i)<<2;  // 0..4095
-        if (debouncing) {
-            adc_debounce[i][adc_debounce_set] = adc_result[i];
-        }
-    }
+#error
 #endif
 #endif // ! STICK_GUEST
 
@@ -156,14 +151,7 @@ adc_initialize(void)
     ADCCON3bits.DIGEN7 = 1;      // Enable ADC
 
 #else
-    // initialize adc to read all channels
-    AD1CON1 = _AD1CON1_SSRC_MASK|_AD1CON1_ASAM_MASK;
-    AD1CON2 = _AD1CON2_CSCNA_MASK|_AD1CON2_SMPI_MASK;
-    assert(bus_frequency == 40000000);
-    AD1CON3 = (2<<_AD1CON3_SAMC_POSITION)|2;  // assumes 40 MHz; 2 uS
-
-    AD1CSSL = 0xffff;  // sample all 16 inputs
-    AD1CON1 |= _AD1CON1_ON_MASK;
+#error
 #endif
 #endif // ! STICK_GUEST
 

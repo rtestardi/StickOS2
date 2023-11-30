@@ -14,11 +14,7 @@
 #define SCOPE  1
 
 #else
-#define FLASH_BYTES  (256*1024)  // the smallest part we support
-#define FLASH_PAGE_SIZE  4096
-#define BASIC_RAM_PAGE_SIZE  4096
-#define BASIC_VARS  200
-#define BASIC_STORES  2
+#error
 
 #endif
 
@@ -38,8 +34,7 @@
 #define FLASH2_START  0x9FC00000  // boot flash, for flash upgrade
 #define FLASH2_BYTES  (20*1024)
 #else
-#define FLASH2_START  0x9FC00000  // boot flash, for flash upgrade
-#define FLASH2_BYTES  (12*1024)
+#error
 #endif
 
 #if SODEBUG && ! STICK_GUEST

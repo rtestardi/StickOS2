@@ -64,14 +64,6 @@ const char * const help_about =
 "Welcome to StickOS for Microchip PIC32MK0512GPK v" VERSION "!\n"
 #elif defined(__32MK0512MCM064__)
 "Welcome to StickOS for Microchip PIC32MK0512MCM v" VERSION "!\n"
-#elif defined(__32MX440F512H__)
-"Welcome to StickOS for Microchip PIC32MXx-F512H v" VERSION "!\n"
-#elif defined(__32MX460F512L__)
-"Welcome to StickOS for Microchip PIC32MXx-F512L v" VERSION "!\n"
-#elif defined(__32MX795F512H__)
-"Welcome to StickOS for Microchip PIC32MX7-F512H v" VERSION "!\n"
-#elif defined(__32MX795F512L__)
-"Welcome to StickOS for Microchip PIC32MX7-F512L v" VERSION "!\n"
 #else
 #error
 #endif
@@ -353,28 +345,7 @@ static const char * const help_pins =
 "i2c: a6=SDA, a7=SCL\n"  // XXX -- why don't other MCUs show these?
 "qspi: b0=SDO, b1=SDI, b2=SCK, b3=SS\n"  // XXX -- why don't other MCUs show these?
 #else
-"  0/8     1/9     2/10    3/11    4/12    5/13    6/14    7/15\n"
-"  ------- ------- ------- ------- ------- ------- ------- --------+\n"
-"  an0     an1     an2     an3     an4     an5     an6     an7     | PORT B\n"
-"  an8     an9     an10    an11    an12    an13    an14    an15    |      B+8\n"
-"          rc1     rc2     rc3     rc4                             | PORT C\n"
-"                                  rc12    rc13    rc14    rc15    |      C+8\n"
-"  rd0     rd1     rd2     rd3     rd4     rd5     rd6     rd7     | PORT D\n"
-"  rd8     rd9     rd10    rd11    rd12    rd13    rd14    rd15    |      D+8\n"
-"  re0     re1     re2     re3     re4     re5     re6     re7     | PORT E\n"
-"  re8     re9                                                     |      E+8\n"
-"  rf0     rf1     rf2     rf3     rf4     rf5                     | PORT F\n"
-"  rf8                             rf12    rf13                    |      F+8\n"
-"  rg0     rg1     rg2     rg3                     rg6     rg7     | PORT G\n"
-"  rg8     rg9                     rg12    rg13    rg14    rg15    |      G+8\n"
-"\n"
-"all pins support general purpose digital input/output\n"
-"an? = potential analog input pins (mV)\n"
-"rd[0-4] = potential analog output (PWM) pins (mV)\n"
-"rd[0-4] = potential servo output (PWM) pins (us)\n"
-"rd[0-4] = potential frequency output pins (Hz)\n"
-"rf4 (u2) = potential uart input pins (received byte)\n"
-"rf5 (u2) = potential uart output pins (transmit byte)\n"
+#error
 #endif
 ;
 

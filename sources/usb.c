@@ -7,7 +7,7 @@
 #if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
 #define PA_TO_KVA  PA_TO_KVA0
 #else
-#define PA_TO_KVA  PA_TO_KVA1
+#error
 #endif
 
 #define DEVICE_DESCRIPTOR_SIZE  18
@@ -250,7 +250,7 @@ usb_isr(void)
 #if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
     IFS1CLR = _IFS1_USB1IF_MASK;
 #else
-    IFS1CLR = _IFS1_USBIF_MASK;
+#error
 #endif
 
     // *** device ***
@@ -619,9 +619,7 @@ usb_initialize(void)
     IPC8bits.USB1IP = 4;
     IPC8bits.USB1IS = 0;
 #else
-    IEC1bits.USBIE = 1;
-    IPC11bits.USBIP = 4;
-    IPC11bits.USBIS = 0;
+#error
 #endif
 
     // initialize usb bdt

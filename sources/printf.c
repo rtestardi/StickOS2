@@ -283,7 +283,6 @@ printf_write(char *buffer, int n)
     write(1, buffer, n);
     return n;
 #else
-
     terminal_print((byte *)buffer, n);
     return n;
 #endif

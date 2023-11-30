@@ -42,28 +42,7 @@
     assert_ram(! (NVMCON & NVMCON_WR)); \
     assert_ram(! (NVMCON & (_NVMCON_WRERR_MASK | _NVMCON_LVDERR_MASK)));
 #else
-    // Enable Flash Write/Erase Operations
-    // wait at least 6 us for LVD start-up
-    // assume we're running at max frequency
-    // (120 MHz) so we're always safe
-    // Wait for WR bit to clear
-        // NULL
-    // Disable Flash Write/Erase operations
-    // assert no errors
-#define FLASH_OPERATION(nvmop) \
-    NVMCON = NVMCON_WREN | nvmop; \
-    { \
-        unsigned long t0 = _CP0_GET_COUNT(); \
-        while (_CP0_GET_COUNT() - t0 < (120/2)*6); \
-    } \
-    NVMKEY = 0xAA996655; \
-    NVMKEY = 0x556699AA; \
-    NVMCONSET = NVMCON_WR; \
-    while (NVMCON & NVMCON_WR) { \
-    } \
-    assert_ram(! (NVMCON & NVMCON_WR)); \
-    NVMCONCLR = NVMCON_WREN; \
-    assert_ram(! (NVMCON & (_NVMCON_WRERR_MASK | _NVMCON_LVDERR_MASK)));
+#error
 #endif
 
 static
@@ -272,11 +251,7 @@ flash_upgrade_ram(void)
         nwords--;
         FLASH_OPERATION(NVMOP_QWORD_PGM);
 #else
-        NVMADDR = KVA_TO_PA((unsigned int)addr);
-        NVMDATA = *data++;
-        FLASH_OPERATION(NVMOP_QWORD_PGM);
-        nwords--;
-        addr++;
+#error
 #endif
     }
 #if SODEBUG

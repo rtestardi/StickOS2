@@ -755,10 +755,7 @@ zb_initialize(void)
     IPC2bits.INT1IP = 4;
     IPC2bits.INT1IS = 0;
 #else
-    // enable int1*
-    IEC0bits.INT1IE = 1;
-    IPC1bits.INT1IP = 4;
-    IPC1bits.INT1IS = 0;
+#error
 #endif
 }
 
