@@ -1,6 +1,17 @@
 history:
   v2.27b (0x45bf) adds boot checksum, fixes flash upgrade, implements uart pin vars
 
+test:
+  confirm checksum
+  full fs turn-on, including testbed, persistent calibration
+  toaster
+  simon
+  breadboard, including i2c display
+  uart console, uart loopbacks, uart to scope
+  spi ledstrip
+  all pins analog and digital and pwm
+  flash upgrade to debug and -g and back
+
 board:
   for qfp, replace pic32 and remove mask from flag in pcb
   consider adding selectable input prescalers?
