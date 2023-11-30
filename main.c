@@ -8,7 +8,6 @@
 #if ! STICK_GUEST
 #if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
 
-
 // PIC32MK0512GPK064 Configuration Bit Settings
 
 // 'C' source line config statements
