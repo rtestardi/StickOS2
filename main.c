@@ -161,6 +161,9 @@ main()  // we're called directly by startup.c
     // purge cache on flash program
     CHECONbits.DCHECOH = 1;
 
+    // prevent JTAG from stealing our red LED after upgrade!
+    CFGCONbits.JTAGEN = 0;
+
     PRISS = 0x76543210;
 
     {
