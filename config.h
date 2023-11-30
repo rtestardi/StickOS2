@@ -38,7 +38,7 @@
 #endif
 
 #if SODEBUG && ! STICK_GUEST
-#define BASIC_LARGE_PAGE_SIZE  (8*1024)
+#define BASIC_LARGE_PAGE_SIZE  (12*1024)
 #else
 #define BASIC_LARGE_PAGE_SIZE  (24*1024)
 #endif
