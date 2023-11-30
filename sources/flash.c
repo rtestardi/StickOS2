@@ -9,9 +9,9 @@
 #define NVMDATA  NVMDATA0
 #endif
 
-#define NVMOP_PAGE_ERASE        0x4004      // Page erase operation
-#define NVMOP_WORD_PGM          0x4001      // Word program operation
-#define NVMOP_QWORD_PGM         0x4002      // Quad Word program operation
+#define NVMOP_PAGE_ERASE        0x4      // Page erase operation
+#define NVMOP_WORD_PGM          0x1      // Word program operation
+#define NVMOP_QWORD_PGM         0x2      // Quad Word program operation
 
 #undef NVMCON_WREN
 #undef NVMCON_WR
@@ -182,6 +182,13 @@ flash_upgrade_ram(void)
     static uint32 npages;
 
     // N.B. this code generates no relocations so we can run it from RAM!!!
+#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+    // un write protect boot memory
+    NVMKEY = 0x0;
+    NVMKEY = 0xAA996655;
+    NVMKEY = 0x556699AA;
+    NVMBWPCLR = 0x1f1f;
+#endif
 
     // erase the program flash
     // flash_erase_pages()
@@ -237,7 +244,7 @@ flash_upgrade_ram(void)
     addr = (uint32 *)FLASH2_START;
     npages = FLASH2_BYTES/FLASH_PAGE_SIZE;
     for (i = 0; i < npages*FLASH_PAGE_SIZE/sizeof(uint32); i++) {
-        assert_ram((rd = addr[i]) == -1);
+        //assert_ram((rd = addr[i]) == -1);
     }
 #endif
 

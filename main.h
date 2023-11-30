@@ -4,7 +4,7 @@
 
 #define VERSION  "2.27a"
 
-#define SODEBUG  1
+//#define SODEBUG  1
 #define DEBUGGING  1  // enable to use mplab x debugger
 
 #define ZIGFLEA  1
