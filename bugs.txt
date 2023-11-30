@@ -1,5 +1,6 @@
 history:
   v2.27b (0x45bf) adds boot checksum, fixes flash upgrade, implements uart pin vars
+  v2.27c (0x....) fix JTAG stealing E3/TDO after flash upgrade
 
 test:
   confirm checksum
