@@ -159,13 +159,8 @@ adc_initialize(void)
     // initialize adc to read all channels
     AD1CON1 = _AD1CON1_SSRC_MASK|_AD1CON1_ASAM_MASK;
     AD1CON2 = _AD1CON2_CSCNA_MASK|_AD1CON2_SMPI_MASK;
-#if defined(__32MX250F128B__)
-    assert(bus_frequency == 48000000);
-    AD1CON3 = (1<<_AD1CON3_SAMC_POSITION)|1;  // assumes 48 MHz; 1 uS
-#else
     assert(bus_frequency == 40000000);
     AD1CON3 = (2<<_AD1CON3_SAMC_POSITION)|2;  // assumes 40 MHz; 2 uS
-#endif
 
     AD1CSSL = 0xffff;  // sample all 16 inputs
     AD1CON1 |= _AD1CON1_ON_MASK;

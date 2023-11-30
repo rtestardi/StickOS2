@@ -5,14 +5,7 @@
 
 #define FLASH_START  0x9D000000
 
-#if defined(__32MX250F128B__)
-#define FLASH_BYTES  (128*1024)  // the smallest part we support
-#define FLASH_PAGE_SIZE  1024
-#define BASIC_RAM_PAGE_SIZE  2048
-#define BASIC_VARS  100
-#define BASIC_STORES  0
-
-#elif defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
 #define FLASH_BYTES  (512*1024)  // the smallest part we support
 #define FLASH_PAGE_SIZE  4096
 #define BASIC_RAM_PAGE_SIZE  4096

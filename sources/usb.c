@@ -618,10 +618,6 @@ usb_initialize(void)
     IEC1bits.USB1IE = 1;
     IPC8bits.USB1IP = 4;
     IPC8bits.USB1IS = 0;
-#elif defined(__32MX250F128B__)
-    IEC1bits.USBIE = 1;
-    IPC7bits.USBIP = 4;
-    IPC7bits.USBIS = 0;
 #else
     IEC1bits.USBIE = 1;
     IPC11bits.USBIP = 4;

@@ -54,53 +54,7 @@ extern const char * const pin_qual_names[];
 
 // N.B. pins marked with *** may affect zigflea or other system operation
 enum pin_number {  // skeleton may extend this
-#if defined(__32MX250F128B__)
-    PIN_RA0,
-    PIN_RA1,
-    PIN_RA2,
-    PIN_RA3,
-    PIN_RA4,
-    PIN_RA5,
-    PIN_RA6,
-    PIN_RA7,
-    PIN_RA8, // unused
-    PIN_RA9, // unused
-    PIN_RA10, // unused
-    PIN_RA11, // unused
-    PIN_RA12, // unused
-    PIN_RA13, // unused
-    PIN_RA14,
-    PIN_RA15,
-    PIN_AN0,  // rb0...
-    PIN_AN1,
-    PIN_AN2,
-    PIN_AN3,
-    PIN_AN4,
-    PIN_AN5,
-    PIN_AN6,
-    PIN_AN7,
-    PIN_AN8,
-    PIN_AN9,
-    PIN_AN10,
-    PIN_AN11,
-    PIN_AN12,
-    PIN_AN13,
-    PIN_AN14,
-    PIN_AN15,
-#define PIN_RB0  PIN_AN0
-#define PIN_RB1  PIN_AN1
-#define PIN_RB2  PIN_AN2
-#define PIN_RB3  PIN_AN3
-#define PIN_RB4  PIN_AN4
-#define PIN_RB5  PIN_AN5
-#define PIN_RB6  PIN_AN6
-#define PIN_RB7  PIN_AN7
-#define PIN_RB8  PIN_AN8
-#define PIN_RB9  PIN_AN9
-#define PIN_RB13  PIN_AN13
-#define PIN_RB14  PIN_AN14
-#define PIN_RB15  PIN_AN15
-#elif defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
     PIN_A0,
     PIN_A1,
     PIN_A2,

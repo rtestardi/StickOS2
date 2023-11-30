@@ -22,9 +22,7 @@ const char * const pin_assignment_names[] = {
 
 byte pin_assignments[pin_assignment_max] = {
     // set our default pin assignments
-#if defined(__32MX250F128B__)
-    PIN_RA1, PIN_RB7, PIN_UNASSIGNED, PIN_UNASSIGNED, PIN_UNASSIGNED, PIN_UNASSIGNED,
-#elif defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
     PIN_E1, PIN_S1, PIN_UNASSIGNED, PIN_UNASSIGNED, PIN_UNASSIGNED, PIN_UNASSIGNED,
 #else
     PIN_RE0, PIN_RE6, PIN_RE1, PIN_RE2, PIN_RE3, PIN_RE4,
@@ -69,40 +67,7 @@ static byte declared[(PIN_UNASSIGNED+7)/8];
 #define DIO  (1<<pin_type_digital_output|1<<pin_type_digital_input)
 
 const struct pin pins[] = {
-#if defined(__32MX250F128B__)
-    "ra0", DIO|1<<pin_type_analog_input,
-    "ra1", DIO|1<<pin_type_analog_input,
-    "xra2", 0,
-    "xra3", 0,
-    "ra4", DIO,
-    "xra5", 0,
-    "xra6", 0,
-    "xra7", 0,
-    "xra8", 0,
-    "xra9", 0,
-    "xra10", 0,
-    "xra11", 0,
-    "xra12", 0,
-    "xra13", 0,
-    "xra14", 0,
-    "xra15", 0,
-    "rb0", DIO|1<<pin_type_analog_input,
-    "rb1", DIO|1<<pin_type_analog_input,
-    "rb2", DIO|1<<pin_type_analog_input|1<<pin_type_analog_output|1<<pin_type_frequency_output|1<<pin_type_servo_output,  // oc4
-    "rb3", DIO|1<<pin_type_analog_input,
-    "rb4", DIO,
-    "rb5", DIO|1<<pin_type_analog_output|1<<pin_type_frequency_output|1<<pin_type_servo_output,  // oc2
-    "xrb6", 0,
-    "rb7", DIO|1<<pin_type_analog_output|1<<pin_type_frequency_output|1<<pin_type_servo_output,  // oc1
-    "rb8", DIO|1<<pin_type_uart_input,
-    "rb9", DIO|1<<pin_type_analog_output|1<<pin_type_frequency_output|1<<pin_type_servo_output,  // oc3
-    "xrb10", 0,
-    "xrb11", 0,
-    "xrb12", 0,
-    "rb13", DIO|1<<pin_type_analog_input|1<<pin_type_analog_output|1<<pin_type_frequency_output|1<<pin_type_servo_output,  // oc5
-    "rb14", DIO|1<<pin_type_analog_input|1<<pin_type_uart_output,
-    "rb15", DIO|1<<pin_type_analog_input,
-#elif defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
     "a0", DIO,
     "a1", DIO|1<<pin_type_analog_input,
     "a2", DIO|1<<pin_type_analog_input,
@@ -283,34 +248,7 @@ pin_get_digital_debounced(int port_offset, int pin_offset)
 
 #endif // ! STICK_GUEST
 
-#if defined(__32MX250F128B__)
-unsigned char pin_to_an(int pin)
-{
-    if (pin == PIN_RA0) {
-        return 0;
-    } else if (pin == PIN_RA1) {
-        return 1;
-    } else if (pin == PIN_RB0){
-        return 2;
-    } else if (pin == PIN_RB1){
-        return 3;
-    } else if (pin == PIN_RB2){
-        return 4;
-    } else if (pin == PIN_RB3){
-        return 5;
-    } else if (pin == PIN_RB13){
-        return 11;
-    } else if (pin == PIN_RB14){
-        return 10;
-    } else if (pin == PIN_RB15){
-        return 9;
-    } else if (pin == PIN_RB0){
-        return 2;
-    } else {
-        assert(0);
-    }
-}
-#elif defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
 unsigned char pin_to_an(int pin)
 {
     if (pin == PIN_A1) {
@@ -357,136 +295,7 @@ pin_declare_internal(IN int pin_number, IN int pin_type, IN int pin_qual, IN boo
 
     // configure the PIC32 pin for the requested function
     switch (pin_number) {
-#if defined(__32MX250F128B__)  // MX2
-        case PIN_RA0:
-        case PIN_RA1:
-        case PIN_RA4:
-            offset = pin_number - PIN_RA0;
-            assert(offset < 16);
-
-            if (pin_type == pin_type_uart_input || pin_type == pin_type_uart_output) {
-                assert(0);
-                U2MODE |= _U2MODE_UARTEN_MASK;
-            } else {
-                if (0) {
-                    U2MODE &= ~_U2MODE_UARTEN_MASK;
-                }
-            }
-
-            if (pin_type == pin_type_digital_input) {
-                // turn on the pullup
-                CNPUASET = 1<<offset;
-            } else {
-                // turn off the pullup
-                CNPUACLR = 1<<offset;
-            }
-
-            if (pin_type == pin_type_analog_input) {
-                ANSELASET = 1<<offset;
-                TRISASET = 1<<offset;
-            } else {
-                ANSELACLR = 1<<offset;
-                if (pin_type == pin_type_digital_output) {
-                    TRISACLR = 1<<offset;
-                } else {
-                    assert(pin_type == pin_type_digital_input);
-                    TRISASET = 1<<offset;
-                }
-            }
-            break;
-        case PIN_RB0:
-        case PIN_RB1:
-        case PIN_RB2:
-        case PIN_RB3:
-        case PIN_RB4:
-        case PIN_RB5:
-        case PIN_RB7:
-        case PIN_RB8:
-        case PIN_RB9:
-        case PIN_RB13:
-        case PIN_RB14:
-        case PIN_RB15:
-            offset = pin_number - PIN_RB0;
-            assert(offset < 16);
-
-            if (pin_type == pin_type_uart_input || pin_type == pin_type_uart_output) {
-                assert(offset == 8 || offset == 14);
-                U2MODE |= _U2MODE_UARTEN_MASK;
-            } else {
-                if (offset == 8 || offset == 14) {
-                    U2MODE &= ~_U2MODE_UARTEN_MASK;
-                }
-            }
-
-            if (pin_type == pin_type_analog_output || pin_type == pin_type_servo_output) {
-                if (freq[0] && freq[0] != pin_type) {
-                    printf("conflicting timer usage\n");
-                    stop();
-                } else {
-                    if (! freq[0]) {
-                        if (pin_type == pin_type_analog_output) {
-                            // configure timer 2 for analog pwm generation
-                            // set pwm prescale to 1
-                            T2CON = 0;
-                            TMR2 = 0;
-                            PR2 = pin_analog-1;
-                            T2CON = _T2CON_ON_MASK;
-                        } else {
-                            // configure timer 2 for servo pwm generation
-                            // set pwm prescale to 64
-                            T2CON = 0;
-                            TMR2 = 0;
-                            PR2 = SERVO_MOD-1;
-                            assert(SERVO_PRESCALE == 64);
-                            T2CON = _T2CON_ON_MASK|(6 << _T2CON_TCKPS_POSITION);
-                        }
-                        freq[0] = pin_type;
-                    }
-                }
-            } else if (pin_type == pin_type_frequency_output) {
-                if (! freq[1]) {
-                    freq[1] = pin_type_frequency_output;
-                    // NULL
-                } else {
-                    printf("conflicting timer usage\n");
-                    stop();
-                }
-            } else {
-                if (offset == 7) {
-                    OC1CONCLR = _OC1CON_ON_MASK;
-                } else if (offset == 5) {
-                    OC2CONCLR = _OC2CON_ON_MASK;
-                } else if (offset == 9) {
-                    OC3CONCLR = _OC3CON_ON_MASK;
-                } else if (offset == 2) {
-                    OC4CONCLR = _OC4CON_ON_MASK;
-                } else if (offset == 13) {
-                    OC5CONCLR = _OC5CON_ON_MASK;
-                }
-            }
-
-            if (pin_type == pin_type_digital_input) {
-                // turn on the pullup
-                CNPUBSET = 1<<offset;
-            } else {
-                // turn off the pullup
-                CNPUBCLR = 1<<offset;
-            }
-
-            if (pin_type == pin_type_analog_input) {
-                ANSELBSET = 1<<offset;
-                TRISBSET = 1<<offset;
-            } else {
-                ANSELBCLR = 1<<offset;
-                if (pin_type == pin_type_digital_output) {
-                    TRISBCLR = 1<<offset;
-                } else {
-                    //assert(pin_type == pin_type_digital_input);
-                    TRISBSET = 1<<offset;
-                }
-            }
-            break;
-#elif defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
         // configure MK
         case PIN_A0:
             // RB
@@ -1036,127 +845,7 @@ pin_set(IN int pin_number, IN int pin_type, IN int pin_qual, IN int32 value)
 
     // set the PIC32 pin to value
     switch (pin_number) {
-#if defined(__32MX250F128B__)  // MX2
-        case PIN_RA0:
-        case PIN_RA1:
-        case PIN_RA4:
-            offset = pin_number - PIN_RA0;
-            assert(offset < 16);
-            assert(pin_type == pin_type_digital_output);
-            if (value) {
-                LATASET = 1<<offset;
-            } else {
-                LATACLR = 1<<offset;
-            }
-            break;
-        case PIN_RB0:
-        case PIN_RB1:
-        case PIN_RB2:
-        case PIN_RB3:
-        case PIN_RB4:
-        case PIN_RB5:
-        case PIN_RB7:
-        case PIN_RB8:
-        case PIN_RB9:
-        case PIN_RB13:
-        case PIN_RB14:
-        case PIN_RB15:
-            offset = pin_number - PIN_RB0;
-            assert(offset < 16);
-            if (pin_type == pin_type_uart_output) {
-                assert(pin_number == PIN_RB14);
-                pin_uart_tx(1, value);
-            } else if (pin_type == pin_type_analog_output || pin_type == pin_type_servo_output) {
-                if (pin_type == pin_type_servo_output) {
-                    value = value*SERVO_MOD/SERVO_MAX;
-                }
-                if (offset == 7) {
-                    OC1CONCLR = _OC1CON_ON_MASK;
-                    OC1R = 0;
-                    OC1RS = value;
-                    OC1CON = _OC1CON_ON_MASK|(6<<_OC1CON_OCM0_POSITION);
-                } else if (offset == 5) {
-                    OC2CONCLR = _OC2CON_ON_MASK;
-                    OC2R = 0;
-                    OC2RS = value;
-                    OC2CON = _OC2CON_ON_MASK|(6<<_OC2CON_OCM0_POSITION);
-                } else if (offset == 9) {
-                    OC3CONCLR = _OC3CON_ON_MASK;
-                    OC3R = 0;
-                    OC3RS = value;
-                    OC3CON = _OC3CON_ON_MASK|(6<<_OC3CON_OCM0_POSITION);
-                } else if (offset == 2) {
-                    OC4CONCLR = _OC4CON_ON_MASK;
-                    OC4R = 0;
-                    OC4RS = value;
-                    OC4CON = _OC4CON_ON_MASK|(6<<_OC4CON_OCM0_POSITION);
-                } else {
-                    assert(offset == 13);
-                    OC5CONCLR = _OC5CON_ON_MASK;
-                    OC5R = 0;
-                    OC5RS = value;
-                    OC5CON = _OC5CON_ON_MASK|(6<<_OC5CON_OCM0_POSITION);
-                }
-            } else if (pin_type == pin_type_frequency_output) {
-                // configure timer 3 for frequency generation
-                T3CONCLR = _T3CON_ON_MASK;
-                TMR3 = 0;
-                PR3 = value;
-                if (offset == 7) {
-                    OC1CONCLR = _OC1CON_ON_MASK;
-                    OC1R = 0;
-                    OC1RS = value;
-                    // hack to work around high minimum frequency
-                    if (value) {
-                        OC1CON = _OC1CON_ON_MASK|_OC1CON_OCTSEL_MASK|(3<<_OC1CON_OCM0_POSITION);
-                    }
-                } else if (offset == 5) {
-                    OC2CONCLR = _OC2CON_ON_MASK;
-                    OC2R = 0;
-                    OC2RS = value;
-                    // hack to work around high minimum frequency
-                    if (value) {
-                        OC2CON = _OC2CON_ON_MASK|_OC2CON_OCTSEL_MASK|(3<<_OC2CON_OCM0_POSITION);
-                    }
-                } else if (offset == 9) {
-                    OC3CONCLR = _OC3CON_ON_MASK;
-                    OC3R = 0;
-                    OC3RS = value;
-                    // hack to work around high minimum frequency
-                    if (value) {
-                        OC3CON = _OC3CON_ON_MASK|_OC3CON_OCTSEL_MASK|(3<<_OC3CON_OCM0_POSITION);
-                    }
-                } else if (offset == 2) {
-                    OC4CONCLR = _OC4CON_ON_MASK;
-                    OC4R = 0;
-                    OC4RS = value;
-                    // hack to work around high minimum frequency
-                    if (value) {
-                        OC4CON = _OC4CON_ON_MASK|_OC4CON_OCTSEL_MASK|(3<<_OC4CON_OCM0_POSITION);
-                    }
-                } else {
-                    assert(offset == 13);
-                    OC5CONCLR = _OC5CON_ON_MASK;
-                    OC5R = 0;
-                    OC5RS = value;
-                    // hack to work around high minimum frequency
-                    if (value) {
-                        OC5CON = _OC5CON_ON_MASK|_OC5CON_OCTSEL_MASK|(3<<_OC5CON_OCM0_POSITION);
-                    }
-                }
-                // set timer prescale to 64
-                T3CON = _T3CON_ON_MASK|(6<<_T3CON_TCKPS0_POSITION);
-                assert(FREQ_PRESCALE == 64);
-            } else {
-                assert(pin_type == pin_type_digital_output);
-                if (value) {
-                    LATBSET = 1<<offset;
-                } else {
-                    LATBCLR = 1<<offset;
-                }
-            }
-            break;
-#elif defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
         // set MK
         case PIN_A0:
             // RB
@@ -1615,75 +1304,7 @@ pin_get(IN int pin_number, IN int pin_type, IN int pin_qual)
 
     // get the value of the PIC32 pin
     switch (pin_number) {
-#if defined(__32MX250F128B__)  // MX2
-        case PIN_RA0:
-        case PIN_RA1:
-        case PIN_RA4:
-            offset = pin_number - PIN_RA0;
-            assert(offset < 16);
-            if (pin_type == pin_type_analog_input) {
-                value = adc_get_value(pin_to_an(pin_number), pin_qual);
-            } else if (pin_qual & 1<<pin_qual_debounced) {
-                assert(pin_type == pin_type_digital_input);
-                value = pin_get_digital_debounced(port_a, offset);
-            } else {
-                assert(pin_type == pin_type_digital_input || pin_type == pin_type_digital_output);
-                value = !! (PORTA & 1 << offset);
-            }
-            break;
-        case PIN_RB0:
-        case PIN_RB1:
-        case PIN_RB2:
-        case PIN_RB3:
-        case PIN_RB4:
-        case PIN_RB5:
-        case PIN_RB7:
-        case PIN_RB8:
-        case PIN_RB9:
-        case PIN_RB13:
-        case PIN_RB14:
-        case PIN_RB15:
-            offset = pin_number - PIN_RB0;
-            assert(offset < 16);
-            if (pin_type == pin_type_uart_input) {
-                assert(offset == 8);
-                value = pin_uart_rx(1);
-            } else if (pin_type == pin_type_uart_output) {
-                assert(offset == 14);
-                value = pin_uart_tx_empty(1)?0:ulasttx[1];
-            } else if (pin_type == pin_type_analog_output || pin_type == pin_type_servo_output || pin_type == pin_type_frequency_output) {
-                // XXX -- servo pins get 2 less than set
-                if (offset == 7) {
-                    value = OC1RS + ((pin_type == pin_type_frequency_output && (OC1CON & _OC1CON_ON_MASK) == 0)?1000000000:0);
-                } else if (offset == 5) {
-                    value = OC2RS + ((pin_type == pin_type_frequency_output && (OC2CON & _OC2CON_ON_MASK) == 0)?1000000000:0);
-                } else if (offset == 9) {
-                    value = OC3RS + ((pin_type == pin_type_frequency_output && (OC3CON & _OC3CON_ON_MASK) == 0)?1000000000:0);
-                } else if (offset == 2) {
-                    value = OC4RS + ((pin_type == pin_type_frequency_output && (OC4CON & _OC4CON_ON_MASK) == 0)?1000000000:0);
-                } else {
-                    assert(offset == 13);
-                    value = OC5RS + ((pin_type == pin_type_frequency_output && (OC5CON & _OC5CON_ON_MASK) == 0)?1000000000:0);
-                }
-                if (pin_type == pin_type_frequency_output) {
-                    if (! value) {
-                        value = 0x10000;
-                    }
-                    value = bus_frequency/FREQ_PRESCALE/(value+1)/2;
-                } else if (pin_type == pin_type_servo_output) {
-                    value = value*SERVO_MAX/SERVO_MOD;
-                }
-            } else if (pin_type == pin_type_analog_input) {
-                value = adc_get_value(pin_to_an(pin_number), pin_qual);
-            } else if (pin_qual & 1<<pin_qual_debounced) {
-                assert(pin_type == pin_type_digital_input);
-                value = pin_get_digital_debounced(port_b, offset);
-            } else {
-                assert(pin_type == pin_type_digital_input || pin_type == pin_type_digital_output);
-                value = !! (PORTB & 1 << offset);
-            }
-            break;
-#elif defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
         // get MK
         case PIN_A0:
             // RB
@@ -2212,13 +1833,11 @@ pin_timer_poll(void)
     sample[port_a] = PORTA;
 #endif
     sample[port_b] = PORTB;
-#if ! defined(__32MX250F128B__)
     sample[port_c] = PORTC;
     sample[port_d] = PORTD;
     sample[port_e] = PORTE;
     sample[port_f] = PORTF;
     sample[port_g] = PORTG;
-#endif
 
     if (++pin_digital_debounce_cycle >= pin_digital_debounce_history_depth) {
         pin_digital_debounce_cycle = 0;
@@ -2270,24 +1889,7 @@ pin_initialize(void)
     // we have to manage shared timer resources across pins
     pin_clear();
 
-#if defined(__32MX250F128B__)
-    RPB2R = 5;  // OC4 -> RB2
-    RPB5R = 5;  // OC2 -> RB5
-    RPB7R = 5;  // OC1 -> RB7
-    RPB9R = 5;  // OC3 -> RB9
-    RPB13R = 6;  // OC5 -> RB13
-
-    RPB0R = 2;  // U2TX -> RB0
-    U2RXR = 2;  // U2RX -> RB1
-
-    // SCL1 -> RB8
-    // SDA1 -> RB9
-
-    RPB13R = 4;  // SDO2 -> RB13
-    SDI2R = 2;  // SDI2 -> RA4
-    SS2R = 1;  // SS2 -> RB14
-    // SCK2 -> RB15
-#elif defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
     // N.B. ports ABC setup in scope.c; ports EG setup in pin.c
     TRISE = 0xffff;
     ANSELE = 0x0000;

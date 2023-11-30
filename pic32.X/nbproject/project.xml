@@ -17,10 +17,6 @@
             </sourceRootList>
             <confList>
                 <confElem>
-                    <name>MX2</name>
-                    <type>2</type>
-                </confElem>
-                <confElem>
                     <name>MK_GPK</name>
                     <type>2</type>
                 </confElem>

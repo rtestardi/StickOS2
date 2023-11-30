@@ -10,9 +10,7 @@
 #define EXCEPTION_HANDLER
 #endif
 
-#if defined(__32MX250F128B__)
-#define ReadADC10(bufIndex) (*(&ADC1BUF0+((bufIndex) * 4)))
-#elif defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
 #define ReadADC10(bufIndex) ((uint16_t) (*((&ADCDATA12) + (bufIndex << 2))))
 #else
 #error

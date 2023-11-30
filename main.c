@@ -80,23 +80,11 @@
 
 #else
     #pragma config UPLLEN   = ON            // USB PLL Enabled
-#if defined(__32MX250F128B__)
-    #pragma config FPLLMUL  = MUL_24        // PLL Multiplier
-#else
     #pragma config FPLLMUL  = MUL_20        // PLL Multiplier
-#endif
     #pragma config UPLLIDIV = DIV_2         // USB PLL Input Divider
     #pragma config FPLLIDIV = DIV_2         // PLL Input Divider
-#if defined(__32MX250F128B__)
-    #pragma config FPLLODIV = DIV_2         // PLL Output Divider
-#else
     #pragma config FPLLODIV = DIV_1         // PLL Output Divider
-#endif
-#if defined(__32MX250F128B__)
-    #pragma config FPBDIV   = DIV_1         // Peripheral Clock divisor
-#else
     #pragma config FPBDIV   = DIV_2         // Peripheral Clock divisor
-#endif
     #pragma config FWDTEN   = OFF           // Watchdog Timer
     #pragma config WDTPS    = PS1           // Watchdog Timer Postscale
     #pragma config FCKSM    = CSDCMD        // Clock Switching & Fail Safe Clock Monitor
@@ -108,22 +96,10 @@
     #pragma config CP       = OFF           // Code Protect
     #pragma config BWP      = OFF           // Boot Flash Write Protect
     #pragma config PWP      = OFF           // Program Flash Write Protect
-#if defined(__32MX250F128B__)
-    #pragma config ICESEL   = ICS_PGx1      // ICE/ICD Comm Channel Select
-#else
     #pragma config ICESEL   = ICS_PGx2      // ICE/ICD Comm Channel Select
-#endif
     #pragma config DEBUG    = OFF           // Debugger Disabled for Starter Kit
 #endif
 
-#if defined(__32MX250F128B__)
-// XXX -- delete me?
-//#pragma config PMDL1WAY = OFF
-//#pragma config IOL1WAY = OFF
-#pragma config JTAGEN = OFF
-#pragma config FVBUSONIO = OFF  // give back vbuson and usbid pins
-#pragma config FUSBIDIO = OFF  // give back vbuson and usbid pins
-#endif
 #endif
 
 #if ! STICK_GUEST
@@ -165,9 +141,7 @@ main()  // we're called directly by startup.c
     TRISACLR = 0x410;
     LATASET = 0x410;
 
-#if defined(__32MX250F128B__)
-    SYSTEMConfigPerformance(48000000L);
-#elif defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
     /* unlock system for clock configuration */
     SYSKEY = 0x00000000;
     SYSKEY = 0xAA996655;
@@ -230,9 +204,7 @@ main()  // we're called directly by startup.c
     // N.B. we can't rely on config bits since the bootloader sets them differently
     SYSKEY = 0xAA996655; // Write Key1 to SYSKEY
     SYSKEY = 0x556699AA; // Write Key2 to SYSKEY
-#if defined(__32MX250F128B__)
-    OSCCONbits.PBDIV = 0;
-#elif defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
     /* Peripheral Bus 1 is by default enabled, set its divisor */
     PB1DIVbits.PBDIV = 0;
     /* Peripheral Bus 2 is by default enabled, set its divisor */
@@ -248,11 +220,7 @@ main()  // we're called directly by startup.c
 #endif
     SYSKEY = 0;
 
-#if defined(__32MX250F128B__)
-    cpu_frequency = 48000000;
-    oscillator_frequency = 8000000;
-    bus_frequency = 48000000;
-#elif defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
     cpu_frequency = 120000000;
     oscillator_frequency = 12000000;
     bus_frequency = 120000000;

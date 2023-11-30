@@ -60,9 +60,7 @@ const char * const commands[] = {
 // *** help ***********************************************************
 
 const char * const help_about =
-#if defined(__32MX250F128B__)
-"Welcome to StickOS for Microchip PIC32MX2-F128B v" VERSION "!\n"
-#elif defined(__32MK0512GPK064__)
+#if defined(__32MK0512GPK064__)
 "Welcome to StickOS for Microchip PIC32MK0512GPK v" VERSION "!\n"
 #elif defined(__32MK0512MCM064__)
 "Welcome to StickOS for Microchip PIC32MK0512MCM v" VERSION "!\n"
@@ -333,25 +331,7 @@ static const char * const help_variables =
 
 static const char * const help_pins =
 "pin names:\n"
-#if defined(__32MX250F128B__)
-"  0/8     1/9     2/10    3/11    4/12    5/13    6/14    7/15\n"
-"  ------- ------- ------- ------- ------- ------- ------- --------+\n"
-"  ra0     ra1                     ra4                             | PORT A\n"
-"                                                                  |      A+8\n"
-"  rb0     rb1     rb2     rb3     rb4     rb5             rb7     | PORT B\n"
-"  rb8     rb9                             rb13    rb14    rb15    |      B+8\n"
-"\n"
-"all pins support general purpose digital input/output\n"
-"ra[0-1],rb[0-3,13-15] = potential analog input pins (mV)\n"
-"rb[2,5,7,9,13] = potential analog output (PWM) pins (mV)\n"
-"rb[2,5,7,9,13] = potential servo output (PWM) pins (us)\n"
-"rb[2,5,7,9,13] = potential frequency output pins (Hz)\n"
-"rb8 (u2) = potential uart input pins (received byte)\n"
-"rb14 (u2) = potential uart output pins (transmit byte)\n"
-"\n"
-"i2c: rb8=SCL1, rb9=SDA1\n"  // XXX -- why don't other MCUs show these?
-"qspi: ra4=SDI2, rb13=SDO2, rb14=SS2, rb15=SCK2\n"  // XXX -- why don't other MCUs show these?
-#elif defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
 "     ICSP        GND 3V3 5V  a0  a1  a2  a3  a4  a5  a6  a7  a8\n"
 "  U                                                          e2\n"
 "  S                                                   GND SCOPE\n"
@@ -702,10 +682,8 @@ basic0_run(char *text_in)
                 p = help_about;
             } else if (parse_word(&text, "reset")) {
 #if ! STICK_GUEST
-#if ! defined(__32MX250F128B__)
                 printf("RCON = 0x%x; RNMICON = 0x%x\n", RCON, RNMICON);
                 RCONCLR = 0xffffff;
-#endif
 #endif
                 break;
 #if ! SODEBUG || STICK_GUEST
