@@ -2,6 +2,9 @@
 #include <sys/kmem.h>
 #include <sys/attribs.h>
 
+unsigned int __attribute__((nomips16))  INTEnableInterrupts(void);
+void __attribute__ ((nomips16)) INTEnableSystemMultiVectoredInt(void);
+
 #if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
 #undef __ISR
 #define __ISR(v,ipl) __attribute__((vector(v), interrupt(ipl), micromips))
