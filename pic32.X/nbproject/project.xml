@@ -20,10 +20,6 @@
                     <name>MK_GPK</name>
                     <type>2</type>
                 </confElem>
-                <confElem>
-                    <name>MK_MCM</name>
-                    <type>2</type>
-                </confElem>
             </confList>
             <formatting>
                 <project-formatting-style>false</project-formatting-style>
