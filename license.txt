@@ -15,6 +15,6 @@ in the public domain.  Please use at your own risk!
 perpetual license to U.S. Patent 8,117,587 for personal, educational, or non-commercial purposes.  This instance
 of StickOS is released "as-is" with no warranty of merchantability and no warranty of fitness for any purpose.
 This license shall not be implied to cover any future releases of StickOS which are not expressly released under
-such a license.  Same for "pic32.X.27a.0x304c.production.hex".
+such a license.  Same for "pic32.X.27a.0xa849.production.hex".
 
 rtestardi@live.com
