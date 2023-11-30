@@ -11,74 +11,67 @@
 
 #define NVMOP_PAGE_ERASE        0x4004      // Page erase operation
 #define NVMOP_WORD_PGM          0x4001      // Word program operation
+#define NVMOP_QWORD_PGM         0x4002      // Quad Word program operation
 
 #undef NVMCON_WREN
 #undef NVMCON_WR
 #define NVMCON_WREN _NVMCON_WREN_MASK
 #define NVMCON_WR  _NVMCON_WR_MASK
 
+#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+    // NVMOP can be written only when WREN is zero. So, clear WREN.
+    /* Clear and Set, as NVMCON contains status bits and hence need to be accessed atomically.
+     * Using bit field access may erroneously cause status bits to get cleared */
+    // Set WREN to enable writes to the WR bit and to prevent NVMOP modification
+    // Write the unlock key sequence
+    // Start the operation
+    // Wait for WR bit to clear
+        // NULL
+    // assert no errors
+#define FLASH_OPERATION(nvmop) \
+    NVMCONCLR = _NVMCON_WREN_MASK; \
+    NVMCONCLR = _NVMCON_NVMOP_MASK; \
+    NVMCONSET = ( _NVMCON_NVMOP_MASK & (((uint32_t)nvmop) << _NVMCON_NVMOP_POSITION) ); \
+    NVMCONSET = _NVMCON_WREN_MASK; \
+    NVMKEY = 0x0; \
+    NVMKEY = 0xAA996655; \
+    NVMKEY = 0x556699AA; \
+    NVMCONSET = _NVMCON_WR_MASK; \
+    while (NVMCON & NVMCON_WR) { \
+    } \
+    assert_ram(! (NVMCON & NVMCON_WR)); \
+    assert_ram(! (NVMCON & (_NVMCON_WRERR_MASK | _NVMCON_LVDERR_MASK)));
+#else
+    // Enable Flash Write/Erase Operations
+    // wait at least 6 us for LVD start-up
+    // assume we're running at max frequency
+    // (120 MHz) so we're always safe
+    // Wait for WR bit to clear
+        // NULL
+    // Disable Flash Write/Erase operations
+    // assert no errors
+#define FLASH_OPERATION(nvmop) \
+    NVMCON = NVMCON_WREN | nvmop; \
+    { \
+        unsigned long t0 = _CP0_GET_COUNT(); \
+        while (_CP0_GET_COUNT() - t0 < (120/2)*6); \
+    } \
+    NVMKEY = 0xAA996655; \
+    NVMKEY = 0x556699AA; \
+    NVMCONSET = NVMCON_WR; \
+    while (NVMCON & NVMCON_WR) { \
+    } \
+    assert_ram(! (NVMCON & NVMCON_WR)); \
+    NVMCONCLR = NVMCON_WREN; \
+    assert_ram(! (NVMCON & (_NVMCON_WRERR_MASK | _NVMCON_LVDERR_MASK)));
+#endif
+
 static
 void
 __attribute__((nomips16))
 flash_operation(unsigned int nvmop)
 {
-#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
-    // NVMOP can be written only when WREN is zero. So, clear WREN.
-    NVMCONCLR = _NVMCON_WREN_MASK;
-
-    /* Clear and Set, as NVMCON contains status bits and hence need to be accessed atomically.
-     * Using bit field access may erroneously cause status bits to get cleared */
-    NVMCONCLR = _NVMCON_NVMOP_MASK;
-    NVMCONSET = ( _NVMCON_NVMOP_MASK & (((uint32_t)nvmop) << _NVMCON_NVMOP_POSITION) );
-
-    // Set WREN to enable writes to the WR bit and to prevent NVMOP modification
-    NVMCONSET = _NVMCON_WREN_MASK;
-
-    // Write the unlock key sequence
-    NVMKEY = 0x0;
-    NVMKEY = 0xAA996655;
-    NVMKEY = 0x556699AA;
-
-    // Start the operation
-    NVMCONSET = _NVMCON_WR_MASK;
-
-    // Wait for WR bit to clear
-    while (NVMCON & NVMCON_WR) {
-        // NULL
-    }
-    assert_ram(! (NVMCON & NVMCON_WR));
-
-    // assert no errors
-    assert_ram(! (NVMCON & (_NVMCON_WRERR_MASK | _NVMCON_LVDERR_MASK)));
-
-#else
-    // Enable Flash Write/Erase Operations
-    NVMCON = NVMCON_WREN | nvmop;
-
-    // wait at least 6 us for LVD start-up
-    // assume we're running at max frequency
-    // (120 MHz) so we're always safe
-    {
-        unsigned long t0 = _CP0_GET_COUNT();
-        while (_CP0_GET_COUNT() - t0 < (120/2)*6);
-    }
-
-    NVMKEY = 0xAA996655;
-    NVMKEY = 0x556699AA;
-    NVMCONSET = NVMCON_WR;
-
-    // Wait for WR bit to clear
-    while (NVMCON & NVMCON_WR) {
-        // NULL
-    }
-    assert_ram(! (NVMCON & NVMCON_WR));
-
-    // Disable Flash Write/Erase operations
-    NVMCONCLR = NVMCON_WREN;
-
-    // assert no errors
-    assert_ram(! (NVMCON & (_NVMCON_WRERR_MASK | _NVMCON_LVDERR_MASK)));
-#endif
+    FLASH_OPERATION(nvmop);
 }
 
 void
@@ -176,12 +169,17 @@ flash_write_words(uint32 *addr_in, uint32 *data_in, uint32 nwords_in)
 void
 __longramfunc__
 __attribute__((nomips16))
-flash_upgrade_ram_begin(void)
+flash_upgrade_ram(void)
 {
-    uint32 *addr;
-    uint32 *data;
-    uint32 nwords;
-    uint32 npages;
+#if SODEBUG
+    static int i;
+    static int rd;
+    static int wd;
+#endif
+    static uint32 *addr;
+    static uint32 *data;
+    static uint32 nwords;
+    static uint32 npages;
 
     // N.B. this code generates no relocations so we can run it from RAM!!!
 
@@ -190,35 +188,18 @@ flash_upgrade_ram_begin(void)
     addr = (uint32 *)FLASH_START;
     npages = FLASH_BYTES/2/FLASH_PAGE_SIZE;
     while (npages) {
-#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
         NVMADDR = KVA_TO_PA((unsigned int)addr);
-        NVMCONCLR = _NVMCON_WREN_MASK;
-        NVMCONCLR = _NVMCON_NVMOP_MASK;
-        NVMCONSET = ( _NVMCON_NVMOP_MASK & (((uint32_t)NVMOP_PAGE_ERASE) << _NVMCON_NVMOP_POSITION) );
-        NVMCONSET = _NVMCON_WREN_MASK;
-        NVMKEY = 0x0;
-        NVMKEY = 0xAA996655;
-        NVMKEY = 0x556699AA;
-        NVMCONSET = _NVMCON_WR_MASK;
-        while (NVMCON & NVMCON_WR) {
-        }
-        assert_ram(! (NVMCON & NVMCON_WR));
-        assert_ram(! (NVMCON & (_NVMCON_WRERR_MASK | _NVMCON_LVDERR_MASK)));
-#else
-        NVMADDR = KVA_TO_PA((unsigned int)addr);
-        NVMCON = NVMCON_WREN | NVMOP_PAGE_ERASE;
-        NVMKEY = 0xAA996655;
-        NVMKEY = 0x556699AA;
-        NVMCONSET = NVMCON_WR;
-        while (NVMCON & NVMCON_WR) {
-        }
-        assert_ram(! (NVMCON & NVMCON_WR));
-        NVMCONCLR = NVMCON_WREN;
-        assert_ram(! (NVMCON & (_NVMCON_WRERR_MASK | _NVMCON_LVDERR_MASK)));
-#endif
+        FLASH_OPERATION(NVMOP_PAGE_ERASE);
         npages--;
         addr += FLASH_PAGE_SIZE/sizeof(uint32);
     }
+#if SODEBUG
+    addr = (uint32 *)FLASH_START;
+    npages = FLASH_BYTES/2/FLASH_PAGE_SIZE;
+    for (i = 0; i < npages*FLASH_PAGE_SIZE/sizeof(uint32); i++) {
+        assert_ram((rd = addr[i]) == -1);
+    }
+#endif
 
     // and re-flash the program flash from the staging area
     // flash_write_words()
@@ -226,74 +207,39 @@ flash_upgrade_ram_begin(void)
     data = (uint32 *)(FLASH_START+FLASH_BYTES/2);
     nwords = (FLASH_BYTES/2 - FLASH2_BYTES)/sizeof(uint32);
     while (nwords) {
-#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
         NVMADDR = KVA_TO_PA((unsigned int)addr);
         NVMDATA = *data;
-        NVMCONCLR = _NVMCON_WREN_MASK;
-        NVMCONCLR = _NVMCON_NVMOP_MASK;
-        NVMCONSET = ( _NVMCON_NVMOP_MASK & (((uint32_t)NVMOP_WORD_PGM) << _NVMCON_NVMOP_POSITION) );
-        NVMCONSET = _NVMCON_WREN_MASK;
-        NVMKEY = 0x0;
-        NVMKEY = 0xAA996655;
-        NVMKEY = 0x556699AA;
-        NVMCONSET = _NVMCON_WR_MASK;
-        while (NVMCON & NVMCON_WR) {
-        }
-        assert_ram(! (NVMCON & NVMCON_WR));
-        assert_ram(! (NVMCON & (_NVMCON_WRERR_MASK | _NVMCON_LVDERR_MASK)));
-#else
-        NVMADDR = KVA_TO_PA((unsigned int)addr);
-        NVMDATA = *data;
-        NVMCON = NVMCON_WREN | NVMOP_WORD_PGM;
-        NVMKEY = 0xAA996655;
-        NVMKEY = 0x556699AA;
-        NVMCONSET = NVMCON_WR;
-        while (NVMCON & NVMCON_WR) {
-        }
-        assert_ram(! (NVMCON & NVMCON_WR));
-        NVMCONCLR = NVMCON_WREN;
-        assert_ram(! (NVMCON & (_NVMCON_WRERR_MASK | _NVMCON_LVDERR_MASK)));
-        ASSERT_RAM(*addr == *data);
-#endif
+        FLASH_OPERATION(NVMOP_WORD_PGM);
         nwords--;
         addr++;
         data++;
     }
+#if SODEBUG
+    addr = (uint32 *)FLASH_START;
+    data = (uint32 *)(FLASH_START+FLASH_BYTES/2);
+    nwords = (FLASH_BYTES/2 - FLASH2_BYTES)/sizeof(uint32);
+    for (i = 0; i < nwords; i++) {
+        assert_ram((wd = addr[i]) == (rd = data[i]));
+    }
+#endif
 
     // erase the boot flash
     // flash_erase_pages()
     addr = (uint32 *)FLASH2_START;
     npages = FLASH2_BYTES/FLASH_PAGE_SIZE;
     while (npages) {
-#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
         NVMADDR = KVA_TO_PA((unsigned int)addr);
-        NVMCONCLR = _NVMCON_WREN_MASK;
-        NVMCONCLR = _NVMCON_NVMOP_MASK;
-        NVMCONSET = ( _NVMCON_NVMOP_MASK & (((uint32_t)NVMOP_PAGE_ERASE) << _NVMCON_NVMOP_POSITION) );
-        NVMCONSET = _NVMCON_WREN_MASK;
-        NVMKEY = 0x0;
-        NVMKEY = 0xAA996655;
-        NVMKEY = 0x556699AA;
-        NVMCONSET = _NVMCON_WR_MASK;
-        while (NVMCON & NVMCON_WR) {
-        }
-        assert_ram(! (NVMCON & NVMCON_WR));
-        assert_ram(! (NVMCON & (_NVMCON_WRERR_MASK | _NVMCON_LVDERR_MASK)));
-#else
-        NVMADDR = KVA_TO_PA((unsigned int)addr);
-        NVMCON = NVMCON_WREN | NVMOP_PAGE_ERASE;
-        NVMKEY = 0xAA996655;
-        NVMKEY = 0x556699AA;
-        NVMCONSET = NVMCON_WR;
-        while (NVMCON & NVMCON_WR) {
-        }
-        assert_ram(! (NVMCON & NVMCON_WR));
-        NVMCONCLR = NVMCON_WREN;
-        assert_ram(! (NVMCON & (_NVMCON_WRERR_MASK | _NVMCON_LVDERR_MASK)));
-#endif
+        FLASH_OPERATION(NVMOP_PAGE_ERASE);
         npages--;
         addr += FLASH_PAGE_SIZE/sizeof(uint32);
     }
+#if SODEBUG
+    addr = (uint32 *)FLASH2_START;
+    npages = FLASH2_BYTES/FLASH_PAGE_SIZE;
+    for (i = 0; i < npages*FLASH_PAGE_SIZE/sizeof(uint32); i++) {
+        assert_ram((rd = addr[i]) == -1);
+    }
+#endif
 
     // and re-flash the boot flash from the staging area
     // flash_write_words()
@@ -302,73 +248,56 @@ flash_upgrade_ram_begin(void)
     nwords = FLASH2_BYTES/sizeof(uint32);
     while (nwords) {
 #if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+        assert_ram((nwords & 3) == 0);
+        // Note: Use only Quad Word program operation (NVMOP<3:0> = 0010) when programming data into the sequence and configuration spaces.
         NVMADDR = KVA_TO_PA((unsigned int)addr);
-        NVMDATA = *data;
-        NVMCONCLR = _NVMCON_WREN_MASK;
-        NVMCONCLR = _NVMCON_NVMOP_MASK;
-        NVMCONSET = ( _NVMCON_NVMOP_MASK & (((uint32_t)NVMOP_WORD_PGM) << _NVMCON_NVMOP_POSITION) );
-        NVMCONSET = _NVMCON_WREN_MASK;
-        NVMKEY = 0x0;
-        NVMKEY = 0xAA996655;
-        NVMKEY = 0x556699AA;
-        NVMCONSET = _NVMCON_WR_MASK;
-        while (NVMCON & NVMCON_WR) {
-        }
-        assert_ram(! (NVMCON & NVMCON_WR));
-        assert_ram(! (NVMCON & (_NVMCON_WRERR_MASK | _NVMCON_LVDERR_MASK)));
+        NVMDATA0 = *data++;
+        addr++;
+        nwords--;
+        NVMDATA1 = *data++;
+        addr++;
+        nwords--;
+        NVMDATA2 = *data++;
+        addr++;
+        nwords--;
+        NVMDATA3 = *data++;
+        addr++;
+        nwords--;
+        FLASH_OPERATION(NVMOP_QWORD_PGM);
 #else
         NVMADDR = KVA_TO_PA((unsigned int)addr);
-        NVMDATA = *data;
-        NVMCON = NVMCON_WREN | NVMOP_WORD_PGM;
-        NVMKEY = 0xAA996655;
-        NVMKEY = 0x556699AA;
-        NVMCONSET = NVMCON_WR;
-        while (NVMCON & NVMCON_WR) {
-        }
-        assert_ram(! (NVMCON & NVMCON_WR));
-        NVMCONCLR = NVMCON_WREN;
-        assert_ram(! (NVMCON & (_NVMCON_WRERR_MASK | _NVMCON_LVDERR_MASK)));
-        ASSERT_RAM(*addr == *data);
-#endif
+        NVMDATA = *data++;
+        FLASH_OPERATION(NVMOP_QWORD_PGM);
         nwords--;
         addr++;
-        data++;
+#endif
     }
+#if SODEBUG
+    addr = (uint32 *)FLASH2_START;
+    data = (uint32 *)(FLASH_START+FLASH_BYTES-FLASH2_BYTES);
+    nwords = FLASH2_BYTES/sizeof(uint32);
+    for (i = 0; i < nwords; i++) {
+        assert_ram((wd = addr[i]) == (rd = data[i]));
+    }
+#endif
 
     // erase the staging area
     // flash_erase_pages(FLASH_BYTES/2, FLASH_BYTES/2/FLASH_PAGE_SIZE)
     addr = (uint32 *)(FLASH_START+FLASH_BYTES/2);
     npages = FLASH_BYTES/2/FLASH_PAGE_SIZE;
     while (npages) {
-#if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
         NVMADDR = KVA_TO_PA((unsigned int)addr);
-        NVMCONCLR = _NVMCON_WREN_MASK;
-        NVMCONCLR = _NVMCON_NVMOP_MASK;
-        NVMCONSET = ( _NVMCON_NVMOP_MASK & (((uint32_t)NVMOP_PAGE_ERASE) << _NVMCON_NVMOP_POSITION) );
-        NVMCONSET = _NVMCON_WREN_MASK;
-        NVMKEY = 0x0;
-        NVMKEY = 0xAA996655;
-        NVMKEY = 0x556699AA;
-        NVMCONSET = _NVMCON_WR_MASK;
-        while (NVMCON & NVMCON_WR) {
-        }
-        assert_ram(! (NVMCON & NVMCON_WR));
-        assert_ram(! (NVMCON & (_NVMCON_WRERR_MASK | _NVMCON_LVDERR_MASK)));
-#else
-        NVMADDR = KVA_TO_PA((unsigned int)addr);
-        NVMCON = NVMCON_WREN | NVMOP_PAGE_ERASE;
-        NVMKEY = 0xAA996655;
-        NVMKEY = 0x556699AA;
-        NVMCONSET = NVMCON_WR;
-        while (NVMCON & NVMCON_WR) {
-        }
-        assert_ram(! (NVMCON & NVMCON_WR));
-        NVMCONCLR = NVMCON_WREN;
-        assert_ram(! (NVMCON & (_NVMCON_WRERR_MASK | _NVMCON_LVDERR_MASK)));
-#endif
+        FLASH_OPERATION(NVMOP_PAGE_ERASE);
         npages--;
         addr += FLASH_PAGE_SIZE/sizeof(uint32);
     }
+#if SODEBUG
+    addr = (uint32 *)(FLASH_START+FLASH_BYTES/2);
+    npages = FLASH_BYTES/2/FLASH_PAGE_SIZE;
+    for (i = 0; i < npages*FLASH_PAGE_SIZE/sizeof(uint32); i++) {
+        assert_ram((rd = addr[i]) == -1);
+    }
+#endif
 
     // reset the MCU
     SYSKEY = 0;
@@ -382,9 +311,8 @@ flash_upgrade_ram_begin(void)
 #endif
 
 #if UPGRADE
-// this function downloads a new s19 firmware file to a staging
-// area, and then installs it by calling a RAM copy of
-// flash_upgrade_ram_begin().
+// this function downloads a new HEX firmware file to a staging
+// area, and then installs it by calling a RAM copy of flash_upgrade_ram().
 void
 flash_upgrade()
 {
@@ -629,7 +557,7 @@ flash_upgrade()
 
     // N.B. the flash upgrade routine is already copied to RAM
     // run it!
-    flash_upgrade_ram_begin();
+    flash_upgrade_ram();
 
     // we should not come back!
     ASSERT(0);  // stop!
