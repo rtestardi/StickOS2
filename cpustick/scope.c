@@ -138,10 +138,10 @@ scope_initialize()
     ADCDMAB = KVA_TO_PA(dmabuffer);
 
     // configure dedicated adcs
-    ADC0TIMEbits.SELRES = 2;  // 10 bit conversion
+    ADC0TIMEbits.SELRES = 3;  // 12 bit conversion
     ADC0TIMEbits.BCHEN = 1;  // DMA enable
     ADC0TIMEbits.ADCDIV = 1;  // TAD = 2*TQ (16.67ns)
-    ADC0TIMEbits.SAMC = 2;  // sample time = 4*TAD (since we have enough time at 3.6 Msps)
+    ADC0TIMEbits.SAMC = 1;  // sample time = 3*TAD (since we have enough time at 3.6 Msps)
     ADC1TIME = ADC0TIME;
     ADC2TIME = ADC0TIME;
     ADC3TIME = ADC0TIME;
@@ -276,17 +276,6 @@ scope_begin(int number1, int number2)
         SYSKEY = 0x33333333;
     }
     
-    // set 12 bit ADC if we can!
-    if (number1 > 1) {
-        ADC0TIMEbits.SELRES = 3;  // 12 bit conversion
-    } else {
-        ADC0TIMEbits.SELRES = 2;  // 10 bit conversion
-    }
-    ADC1TIME = ADC0TIME;
-    ADC2TIME = ADC0TIME;
-    ADC3TIME = ADC0TIME;
-    ADC4TIME = ADC0TIME;
-
     pin_declare(PIN_A0, pin_type_digital_output, 0);
     pin_declare(PIN_A1, pin_type_digital_output, 0);
     pin_declare(PIN_A2, pin_type_digital_output, 0);
@@ -623,11 +612,7 @@ scope_result(int number1)
     for (i = trigger; i < trigger+SAMPLES+EXTRA; i++) {
         for (m = 0; m < magnify; m++) {
             bits = bitsbuffer[i%INTERLEAVE][(i/INTERLEAVE)%LENGTHOF(bitsbuffer[0])];
-            if (number1 > 1) {
-                printf("%d,0x%x\n", adcbuffer[i%LENGTHOF(adcbuffer)], ptovbits(bits));
-            } else {
-                printf("%d 0x%x\n", adcbuffer[i%LENGTHOF(adcbuffer)] >> 2, ptovbits(bits));
-            }
+            printf("%d,0x%x\n", adcbuffer[i%LENGTHOF(adcbuffer)], ptovbits(bits));
             if (++l == SAMPLES+EXTRA) {
                 return;
             }
