@@ -275,6 +275,17 @@ scope_begin(int number1, int number2)
         /* Lock system since done with clock configuration */
         SYSKEY = 0x33333333;
     }
+    
+    // set 12 bit ADC if we can!
+    if (number1 > 1) {
+        ADC0TIMEbits.SELRES = 3;  // 12 bit conversion
+    } else {
+        ADC0TIMEbits.SELRES = 2;  // 10 bit conversion
+    }
+    ADC1TIME = ADC0TIME;
+    ADC2TIME = ADC0TIME;
+    ADC3TIME = ADC0TIME;
+    ADC4TIME = ADC0TIME;
 
     pin_declare(PIN_A0, pin_type_digital_output, 0);
     pin_declare(PIN_A1, pin_type_digital_output, 0);
@@ -304,6 +315,7 @@ scope_begin(int number1, int number2)
     // set dac3 to number2
     DAC3CONbits.REFSEL = 3;  // Positive reference voltage = AVDD
     DAC3CONbits.DACDAT = number2 << 2;  // 10 bit input to 12 bit register
+
     //DAC3CONbits.DACOE = 1;  // enable DAC3OUT on CDAC3/RA8
     DAC3CONbits.ON = 1;
 
@@ -601,7 +613,7 @@ scope_capture_end(void)
 }
 
 void
-scope_result()
+scope_result(int number1)
 {
     int i;
     int bits;
@@ -611,7 +623,11 @@ scope_result()
     for (i = trigger; i < trigger+SAMPLES+EXTRA; i++) {
         for (m = 0; m < magnify; m++) {
             bits = bitsbuffer[i%INTERLEAVE][(i/INTERLEAVE)%LENGTHOF(bitsbuffer[0])];
-            printf("%d 0x%x\n", adcbuffer[i%LENGTHOF(adcbuffer)] >> 2, ptovbits(bits));
+            if (number1 > 1) {
+                printf("%d,0x%x\n", adcbuffer[i%LENGTHOF(adcbuffer)], ptovbits(bits));
+            } else {
+                printf("%d 0x%x\n", adcbuffer[i%LENGTHOF(adcbuffer)] >> 2, ptovbits(bits));
+            }
             if (++l == SAMPLES+EXTRA) {
                 return;
             }
@@ -674,7 +690,7 @@ void scope(int number1, bool rise, bool fall, bool level, bool automatic, int di
     scope_capture_end();
 
     if (run_stop) {
-        scope_result();
+        scope_result(number1);
     }
 
     run_stop = false;
