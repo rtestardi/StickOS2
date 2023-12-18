@@ -1,6 +1,7 @@
 history:
-  v2.27b (0x45bf) adds flash checksum, fixes flash upgrade, implements uart pin vars
+  v2.27b (0x45bf) add flash checksum, fix flash upgrade, implement uart pin vars
   v2.27c (0x50c0) fix JTAG stealing E3/TDO after flash upgrade
+  v2.27d (0x423c) switch ADC to 12-bit mode
 
 test:
   confirm checksum
