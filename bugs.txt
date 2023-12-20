@@ -7,12 +7,12 @@ history:
 
 test:
   confirm checksum
-  full fs turn-on, including testbed, persistent calibration
+  full pcba turn-on, including testbed, persistent calibration
   toaster
   simon
   breadboard, including i2c display
   uart console, uart loopbacks, uart to scope
-  spi ledstrip
+  spi ledstrip, display
   all pins analog and digital and pwm
   flash upgrade to debug and -g and back
   test windows, linux, android, mac, chromebook
