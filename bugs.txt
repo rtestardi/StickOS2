@@ -4,7 +4,6 @@ history:
   v2.27b (0x45bf) fix flash upgrade, implement uart pin vars
   v2.27c (0x50c0) fix JTAG stealing E3/TDO after flash upgrade
   v2.27d (0x423c) switch ADC to 12-bit mode; bump flash calibration values by 4x
-  v2.27e () expand square wave output frequency range; enable a0-a8 pullups on boot
 
 test:
   confirm checksum
