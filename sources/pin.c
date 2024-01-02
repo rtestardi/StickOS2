@@ -1208,11 +1208,11 @@ pin_initialize(void)
     // N.B. ports ABC setup in scope.c; ports EG setup in pin.c
     TRISE = 0xffff;
     ANSELE = 0x0000;
-    //CNPUE = ~ANSELE;  // keep inputs at low power  // XXX -- WHY DOES THIS BREAK TOASTER ANALOG INPUT???
+    CNPUE = ~ANSELE;  // keep inputs at low power
 
     TRISG = 0xffff;
     ANSELG = 0x0000;
-    //CNPUG = ~ANSELG;  // keep inputs at low power  // XXX -- WHY DOES THIS BREAK TOASTER ANALOG INPUT???
+    CNPUG = ~ANSELG;  // keep inputs at low power
 
     RPE14R = 6;  // OC5 -> RE14
     RPE15R = 6;  // OC6 -> RE15
