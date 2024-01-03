@@ -206,6 +206,9 @@ pin_declare_internal(IN int pin_number, IN int pin_type, IN int pin_qual, IN boo
         pin_type = pin_type_digital_input;
     }
 
+    // N.B. we do not enable pullups on any pins scanned by ADC because doing so causes other scanned ADCs
+    //      to get the wrong values (if the pullup pins are floating) -- I don't understand why!
+
     // configure the PIC32 pin for the requested function
     switch (pin_number) {
 #if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
@@ -237,7 +240,7 @@ pin_declare_internal(IN int pin_number, IN int pin_type, IN int pin_qual, IN boo
                 TRISESET = 1 << offset;
             } else if (pin_type == pin_type_digital_input) {
                 ANSELECLR = 1 << offset;
-                CNPUESET = 1 << offset;
+                //CNPUESET = 1 << offset;  // XXX -- WHY DOES THIS BREAK TOASTER ANALOG INPUT???
                 TRISESET = 1 << offset;
             } else {
                 // output
@@ -299,7 +302,7 @@ pin_declare_internal(IN int pin_number, IN int pin_type, IN int pin_qual, IN boo
                 TRISGSET = 1 << offset;
             } else if (pin_type == pin_type_digital_input) {
                 ANSELGCLR = 1 << offset;
-                CNPUGSET = 1 << offset;
+                //CNPUGSET = 1 << offset;  // XXX -- WHY DOES THIS BREAK TOASTER ANALOG INPUT???
                 TRISGSET = 1 << offset;
             } else {
                 // output
@@ -1203,8 +1206,11 @@ pin_initialize(void)
 
     // we have to manage shared timer resources across pins
     pin_clear();
-
+    
 #if defined(__32MK0512GPK064__) || defined(__32MK0512MCM064__)
+    // N.B. we do not enable pullups on any pins scanned by ADC because doing so causes other scanned ADCs
+    //      to get the wrong values (if the pullup pins are floating) -- I don't understand why!
+
     // N.B. ports ABC setup in scope.c; ports EG setup in pin.c
     TRISE = 0xffff;
     ANSELE = 0x0000;

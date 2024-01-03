@@ -112,16 +112,19 @@ adc_initialize(void)
     ADCCON3bits.ADCSEL = 3;  // Select ADC input clock source = SYSCLK 120Mhz
     ADCCON3bits.CONCLKDIV = 0;  // Analog-to-Digital Control Clock (TQ) Divider = SYSCLK Divide by 1 (8.33ns)
     ADCCON1bits.FSSCLKEN = 1;  // Fast synchronous SYSCLK to ADC control clock is enabled
-    ADCCON1bits.FSPBCLKEN = 1;  // ???
+    //ADCCON1bits.FSPBCLKEN = 1;  // ???
 
     ADCANCONbits.WKUPCLKCNT = 0x9;  // ADC Warm up delay = (512 * TADx)
 
     // configure shared adc
     ADCCON1bits.SELRES = 2;  // 10 bit conversion for shared
-    ADCCON2bits.SAMC = 200;  // sample time = 202*TAD for shared  // XXX -- WHY DOES 2 BREAK TOASTER ANALOG INPUT???
+    ADCCON2bits.SAMC = 0xff;  // sample time = 257*TAD for shared
     ADCCON2bits.ADCDIV = 1;  // TAD = 2*TQ for shared
 
     ADCANCONbits.ANEN7 = 1;  // Enable ADC7 analog bias/logic
+
+    // N.B. we do not enable pullups on any pins scanned by ADC because doing so causes other scanned ADCs
+    //      to get the wrong values (if the pullup pins are floating) -- I don't understand why!
 
     // shared adc scans AN12 thru AN19
     ADCTRG4bits.TRGSRC12 = 1;  // GSWTRG
