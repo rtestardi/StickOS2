@@ -25,6 +25,7 @@ enum cmdcode {
 #if SCOPE && ! STICK_GUEST
     command_scope,
     command_wave,
+    command_ver,
 #endif
     command_hostname,
     command_dummy
@@ -52,6 +53,7 @@ const char * const commands[] = {
 #if SCOPE && ! STICK_GUEST
     "scope",
     "wave",
+    "ver",
 #endif
     "hostname",
 };
@@ -834,6 +836,10 @@ basic0_run(char *text_in)
             }
 
             wave(pattern, number2);
+            break;
+
+        case command_ver:
+            printf(VERSION " (checksum 0x%x)\n", flash_checksum);
             break;
 #endif
 
