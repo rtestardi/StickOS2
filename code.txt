@@ -1,0 +1,420 @@
+toaster:
+  10 dim target, secs
+  20 dim thermocouple as pin a8 for analog input
+  30 dim relay as pin a0 for digital output
+  40 dim buzzer as pin a6 for frequency output
+  50 data 512, 90, 746, 105, 894, 20, -1, -1
+  60 configure timer 0 for 1 s
+  70 on timer 0 do gosub adjust
+  80 while target!=-1 do
+  90   sleep secs s
+ 100   read target, secs
+ 110 endwhile 
+ 120 off timer 0
+ 130 relay = 0, buzzer = 100
+ 140 sleep 1 s
+ 150 buzzer = 0
+ 160 end 
+ 170 sub adjust
+ 180   relay = thermocouple<target
+ 190   buzzer = thermocouple
+ 200   sleep 100 ms
+ 210   buzzer = target
+ 220   sleep 100 ms
+ 230   buzzer = 0
+ 240 endsub
+
+simon:
+  10 dim notearray[30]
+  20 dim gamemode, replaystate, waittime, arraylength, arrayindex
+  30 dim last_sw[4]
+  40 dim buzzer as pin a4 for frequency output
+  50 dim led[0] as pin a1 for digital output
+  60 dim led[1] as pin a3 for digital output
+  70 dim led[2] as pin a5 for digital output
+  80 dim led[3] as pin a7 for digital output
+  90 dim sw[0] as pin b1 for digital input debounced inverted
+ 100 dim sw[1] as pin b3 for digital input debounced inverted
+ 110 dim sw[2] as pin b6 for digital input debounced inverted
+ 120 dim sw[3] as pin b8 for digital input debounced inverted
+ 130 configure timer 1 for 500 ms
+ 140 on timer 1 do gosub timer_popped
+ 150 on sw[0]!=last_sw[0] do gosub sw_changed 0, sw[0]
+ 160 on sw[1]!=last_sw[1] do gosub sw_changed 1, sw[1]
+ 170 on sw[2]!=last_sw[2] do gosub sw_changed 2, sw[2]
+ 180 on sw[3]!=last_sw[3] do gosub sw_changed 3, sw[3]
+ 190 led[0] = 0, led[1] = 0, led[2] = 0, led[3] = 0
+ 200 buzzer = 0
+ 210 arraylength = 0
+ 220 gosub addnote
+ 230 halt 
+ 240 sub timer_popped
+ 250   print "timer_popped"
+ 260   if gamemode==0 then
+ 270     gosub sw_changed notearray[arrayindex], !replaystate
+ 280     if replaystate then
+ 290       arrayindex = arrayindex+1
+ 300     endif 
+ 310     replaystate = !replaystate
+ 320     if arrayindex==arraylength then
+ 330       gamemode = 1
+ 340       arrayindex = 0
+ 350       waittime = 0
+ 360     endif 
+ 370   elseif gamemode==1 then
+ 380     waittime = waittime+1
+ 390     if waittime==5 then
+ 400       gosub gameover
+ 410     endif 
+ 420   elseif gamemode==2 then
+ 430     gamemode = 0
+ 440   elseif gamemode==3 then
+ 450     buzzer = 100
+ 460     waittime = waittime+1
+ 470     if waittime==3 then
+ 480       replaystate = 0
+ 490       buzzer = 0
+ 500       arrayindex = 0
+ 510       arraylength = 0
+ 520       gamemode = 0
+ 530       gosub addnote
+ 540     endif 
+ 550   endif 
+ 560 endsub 
+ 570 sub lightbuzz n, down
+ 580   led[n] = down
+ 590   buzzer = down*(440+110*n)
+ 600 endsub 
+ 610 sub sw_changed n, down
+ 620   last_sw[n] = sw[n]
+ 630   print "sw_changed", n, down
+ 640   if down then
+ 650     if gamemode==0 then
+ 660       gosub lightbuzz n, down
+ 670     else 
+ 680       if notearray[arrayindex]==n then
+ 690         gosub lightbuzz n, down
+ 700         arrayindex = arrayindex+1
+ 710         waittime = 0
+ 720       else 
+ 730         gosub gameover
+ 740       endif 
+ 750     endif 
+ 760   elseif gamemode!=3 then
+ 770     gosub lightbuzz n, down
+ 780     waittime = 0
+ 790     if arrayindex==arraylength then
+ 800       gosub addnote
+ 810     endif 
+ 820   endif 
+ 830 endsub 
+ 840 sub addnote
+ 850   notearray[arraylength] = random&3
+ 860   arraylength = arraylength+1
+ 870   arrayindex = 0
+ 880   gamemode = 2
+ 890   replaystate = 0
+ 900 endsub 
+ 910 sub gameover
+ 920   print "gameover"
+ 930   buzzer = 100
+ 940   led[0] = 0, led[1] = 0, led[2] = 0, led[3] = 0
+ 950   gamemode = 3
+ 960   waittime = 0
+ 970 endsub 
+ 980 end 
+
+uarttest uart:
+  10 configure uart 1 for 300 baud 8 data no parity
+  20 configure uart 2 for 9600 baud 8 data no parity
+  30 dim a as byte, b as byte, c as byte, d as byte
+  40 a = 0x55, b = 0xaa
+  50 while 1 do
+  60   sleep 100 ms
+  70   uart 1 write a
+  80   uart 2 write b
+  90   uart 1 read c
+ 100   uart 2 read d
+ 110   print hex c, d
+ 120 endwhile 
+
+uarttest pins:
+  10 configure uart 1 for 2400 baud 8 data no parity
+  20 configure uart 2 for 2400 baud 8 data no parity
+  30 dim tx as pin b8 for uart output
+  40 dim rx as pin b6 for uart input
+  50 dim tx2 as pin b7 for uart output
+  60 dim rx2 as pin b4 for uart input
+  70 while 1 do
+  80   tx = 33, tx2 = 44
+  90   print rx, rx2
+ 100   sleep 100 ms
+ 110   print rx, rx2
+ 120 endwhile 
+
+breadboard thermometer:
+  10 dim reset as pin a8 for digital output
+  20 reset = 0, reset = 1
+  30 dim temp, line1$[32], line2$[32], blink$[2]
+  40 let blink$ = " *"
+  50 gosub initdisplay
+  60 while 1 do
+  70   gosub gettemp temp
+  80   vprint line1$ = temp, "degrees C"
+  90   vprint line2$ = temp*9/5+32, "degrees F", blink$[seconds%2:1]
+ 100   gosub display line1, line2
+ 110   sleep 500 ms
+ 120 endwhile 
+ 130 end 
+ 140 rem --- gettemp ---
+ 150 sub gettemp temp
+ 160   dim cmd as byte, rsp[2] as byte
+ 170   let cmd = 0
+ 180   i2c start 0x48
+ 190   i2c write cmd
+ 200   i2c read rsp
+ 210   i2c stop
+ 220   let temp = rsp[0]
+ 230 endsub 
+ 240 rem --- display ---
+ 250 sub display line1, line2
+ 260   dim cmd1 as byte, data as byte, cmd2 as byte
+ 270   let cmd1 = 0x80, data = 0x2, cmd2 = 0x40
+ 280   i2c start 0x3c
+ 290   i2c write cmd1, data, cmd2, line1
+ 300   i2c stop
+ 310   let cmd1 = 0x80, data = 0xc0, cmd2 = 0x40
+ 320   i2c start 0x3c
+ 330   i2c write cmd1, data, cmd2, line2
+ 340   i2c stop
+ 350 endsub 
+ 360 rem --- initdisplay ---
+ 370 sub initdisplay
+ 380   dim i, init[10] as byte
+ 390   for i = 1 to init#
+ 400     read init[i-1]
+ 410   next 
+ 420   i2c start 0x3c
+ 430   i2c write init
+ 440   i2c stop
+ 450   sleep 100 ms
+ 460 endsub 
+ 470 data 0, 0x38, 0x39, 0x14, 0x78, 0x5e, 0x6d, 0xc, 0x1, 0x6
+
+breadboard led:
+  10 dim common as pin a4 for analog output
+  20 common = 3300-1800
+  30 dim seg[0] as pin b0 for digital output
+  40 dim seg[1] as pin b1 for digital output
+  50 dim seg[2] as pin b2 for digital output
+  60 dim seg[3] as pin b3 for digital output
+  70 dim seg[4] as pin b4 for digital output
+  80 dim seg[5] as pin b5 for digital output
+  90 dim i
+ 100 while 1 do
+ 110   for i = 0 to 5
+ 120     seg[i] = 1, seg[(i+5)%6] = 0
+ 130     sleep 200 ms
+ 140   next 
+ 150 endwhile 
+
+breadboard servo:
+  10 dim servo as pin a3 for servo output
+  20 while 1 do
+  30   for servo = 1000 to 2000 step 100
+  40     sleep 200 ms
+  50   next 
+  60   for servo = 2000 to 1000 step -100
+  70     sleep 200 ms
+  80   next 
+  90 endwhile 
+
+display:
+  10 dim cs as pin b3 for digital output
+  20 cs = 0
+  30 dim rom[80], n
+  40 gosub init rom
+  50 n = 0
+  60 while 1 do
+  70   print n
+  80   gosub display rom, n
+  90   sleep 100 ms
+ 100   n = n+1
+ 110 endwhile 
+ 120 sub init rom
+ 130   dim x as short
+ 140   restore rom
+ 150   for x = 0 to rom#-1
+ 160     read rom[x]
+ 170   next 
+ 180   restore init
+ 190   while 1 do
+ 200     read x
+ 210     if x==0xffff then
+ 220       break 
+ 230     endif 
+ 240     qspi x, x, x, x
+ 250     cs = 1, cs = 0
+ 260   endwhile 
+ 270 endsub 
+ 280 label init
+ 290 data 0x900  // register 9: no decode
+ 300 data 0xa01  // register a: low intensity
+ 310 data 0xb07  // register b: 8 digits
+ 320 data 0xc01  // register c: normal operation
+ 330 data -1
+ 340 sub display rom, n
+ 350   dim i, j, k, row, x as short
+ 360   for row = 1 to 8
+ 370     i = n
+ 380     for j = 1 to 4
+ 390       k = i%10, i = i/10
+ 400       x = row<<8|rom[k*8+8-row]
+ 410       qspi x
+ 420     next 
+ 430     cs = 1, cs = 0
+ 440   next 
+ 450 endsub 
+ 460 // https://github.com/dhepper/font8x8/blob/master/font8x8_b
+ 470 // MAX7219 register 8 (top row), 7, 6, 5, 4, 3, 2, 1 (bottom row)
+ 480 // command 0xrbb -- r = register/row, bb = 8 bits for 8 LEDs
+ 490 // least significant bit is left-most LED in row
+ 500 label rom
+ 510 data 0x3e, 0x63, 0x73, 0x7b, 0x6f, 0x67, 0x3e, 0x0  // U+0030 (0)
+ 520 data 0xc, 0xe, 0xc, 0xc, 0xc, 0xc, 0x3f, 0x0  // U+0031 (1)
+ 530 data 0x1e, 0x33, 0x30, 0x1c, 0x6, 0x33, 0x3f, 0x0  // U+0032 (2)
+ 540 data 0x1e, 0x33, 0x30, 0x1c, 0x30, 0x33, 0x1e, 0x0  // U+0033 (3)
+ 550 data 0x38, 0x3c, 0x36, 0x33, 0x7f, 0x30, 0x78, 0x0  // U+0034 (4)
+ 560 data 0x3f, 0x3, 0x1f, 0x30, 0x30, 0x33, 0x1e, 0x0  // U+0035 (5)
+ 570 data 0x1c, 0x6, 0x3, 0x1f, 0x33, 0x33, 0x1e, 0x0  // U+0036 (6)
+ 580 data 0x3f, 0x33, 0x30, 0x18, 0xc, 0xc, 0xc, 0x0  // U+0037 (7)
+ 590 data 0x1e, 0x33, 0x33, 0x1e, 0x33, 0x33, 0x1e, 0x0  // U+0038 (8)
+ 600 data 0x1e, 0x33, 0x33, 0x3e, 0x30, 0x18, 0xe, 0x0  // U+0039 (9)
+
+ledstrip:  https://learn.adafruit.com/hl1606-led-strip/overview
+  10 dim i, r, g, b
+  20 dim a as short, c as short
+  30 while 1 do
+  40   for r = 0 to 1
+  50     for g = 0 to 1
+  60       for b = 0 to 1
+  70         a = 0x80|b<<4|r<<2|g
+  80         a = a<<8|a
+  90         print hex a
+ 100         for i = 1 to 16
+ 110           c = a
+ 120           qspi c
+ 125           print c
+ 130           sleep 100 ms
+ 140         next 
+ 150       next 
+ 160     next 
+ 170   next 
+ 180 endwhile 
+
+a digital out:
+  10 dim i, j
+  20 dim a[0] as pin a0 for digital output
+  30 dim a[1] as pin a1 for digital output
+  40 dim a[2] as pin a2 for digital output
+  50 dim a[3] as pin a3 for digital output
+  60 dim a[4] as pin a4 for digital output
+  70 dim a[5] as pin a5 for digital output
+  80 dim a[6] as pin a6 for digital output
+  90 dim a[7] as pin a7 for digital output
+ 100 dim a[8] as pin a8 for digital output
+ 110 while 1 do
+ 120   for i = 0 to 8
+ 125     print i
+ 130     for j = 0 to 8
+ 140       a[j] = i==j
+ 150     next 
+ 160     sleep 1 s
+ 170   next 
+ 180 endwhile 
+
+b digital out:
+  10 dim i, j
+  20 dim a[0] as pin b0 for digital output
+  30 dim a[1] as pin b1 for digital output
+  40 dim a[2] as pin b2 for digital output
+  50 dim a[3] as pin b3 for digital output
+  60 dim a[4] as pin b4 for digital output
+  70 dim a[5] as pin b5 for digital output
+  80 dim a[6] as pin b6 for digital output
+  90 dim a[7] as pin b7 for digital output
+ 100 dim a[8] as pin b8 for digital output
+ 110 while 1 do
+ 120   for i = 0 to 8
+ 125     print i
+ 130     for j = 0 to 8
+ 140       a[j] = i==j
+ 150     next 
+ 160     sleep 1 s
+ 170   next 
+ 180 endwhile 
+
+solderless:
+  10 dim a as pin a0 for digital input
+  20 dim b as pin a1 for digital input
+  30 dim c as pin a2 for digital input
+  40 dim d as pin a3 for digital input
+  50 dim e as pin a4 for digital input
+  60 dim f as pin a5 for digital input
+  70 dim g as pin a6 for digital input
+  80 dim h as pin a7 for digital input
+  90 dim i as pin a8 for digital input
+ 100 while 1 do
+ 110   print a, b, c, d, e, f, g, h, i
+ 120   sleep 1 s
+ 130 endwhile 
+
+  10 dim a as pin b0 for digital input
+  20 dim b as pin b1 for digital input
+  30 dim c as pin b2 for digital input
+  40 dim d as pin b3 for digital input
+  50 dim e as pin b4 for digital input
+  60 dim f as pin b5 for digital input
+  70 dim g as pin b6 for digital input
+  80 dim h as pin b7 for digital input
+  90 dim i as pin b8 for digital input
+ 100 while 1 do
+ 110   print a, b, c, d, e, f, g, h, i
+ 120   sleep 1 s
+ 130 endwhile 
+
+  20 dim b as pin a1 for analog input
+  30 dim c as pin a2 for analog input
+  40 dim d as pin a3 for analog input
+  50 dim e as pin a4 for analog input
+  60 dim f as pin a5 for analog input
+  70 dim g as pin a6 for analog input
+  80 dim h as pin a7 for analog input
+  90 dim i as pin a8 for analog input
+ 100 while 1 do
+ 110   print b, c, d, e, f, g, h, i
+ 120   sleep 1 s
+ 130 endwhile 
+
+  40 dim d as pin a3 for analog output
+  50 dim e as pin a4 for analog output
+  60 dim f as pin a5 for analog output
+  70 dim g as pin a6 for analog output
+  80 dim h as pin a7 for analog output
+  90 dim i as pin a8 for analog output
+ 100 d=400,e=800,f=1200,g=1600,h=2000,i=2400
+
+  40 dim d as pin a3 for servo output
+  50 dim e as pin a4 for servo output
+  60 dim f as pin a5 for servo output
+  70 dim g as pin a6 for servo output
+  80 dim h as pin a7 for servo output
+  90 dim i as pin a8 for servo output
+ 100 d=400,e=800,f=1200,g=1600,h=2000,i=2400
+
+  10 dim f as pin a3 for frequency output
+  20 while 1 do
+  30   for f = 1000 to 2000 step 100
+  40     sleep 100 ms
+  50   next 
+  60 endwhile 
