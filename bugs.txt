@@ -6,6 +6,7 @@ history:
   v2.27d (0x423c) switch ADC to 12-bit mode; bump flash calibration values by 4x
   v2.27e (0x2a37) disable pullups on pins a0-a8 because they seem incompatible with ADC scanning
   v2.27f (0x55c1) add "ver" command
+  v2.27g (0x7c8e) prep for release
 
 test:
   confirm checksum
