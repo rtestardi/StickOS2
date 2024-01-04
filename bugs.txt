@@ -22,7 +22,6 @@ test:
 board:
   for qfp, replace pic32 and remove mask from flag in pcb
   consider adding selectable input prescalers?
-  make 2-pin power supply jumpers also offset
   move switches so no interference when bending panel board to separate?  move mlcc's farther from board edge?
 
 todo arch:
@@ -31,7 +30,6 @@ todo arch:
 todo html:
   calibration values should not be stored if outside expected range
   allow "measure" button to drag crosshairs (rather than place dot)
-  consider setting ADC to 12 bit mode for all but highest sample rates, to get 4 mV vertical resolution
   allow display resize
   horizontal scrolling of trace on chromebook does not work :-(
   have measure divisions or sample grid for manual clock recovery
@@ -44,9 +42,10 @@ todo html:
   aliasing at right and left vertical marker vs. signal
 
 toto StickOS:
+  falling edge trigger level on power supply ripple seems ~0.1V high?
   scope should have all interrupts (even usb) disabled for the first 1000ms of trigger (delayed ctrl-c)
   add webusb auto load, allow usb stall, https://developer.chrome.com/articles/build-for-webusb/
-  add ms usb descriptor
+  add microsoft usb descriptor
   on i2c reset do xxx (possibly just continue)
   allow pin names in upper or lower case
   remove zigflea -- nodeid, remote variables, etc.
@@ -56,7 +55,6 @@ toto StickOS:
   overclock if s1 not pressed on boot?  20 Msps?
   download and clone?
   test "out of variables"
-  test/implement open_drain pins?  other qualifiers?
   pullups for all unused/disconnected pins -- not near analog sample pins!!!
   rc10 should be driven low when wave is not in use
   heartbeat led does not blink while waiting for trigger (well, yeah)
