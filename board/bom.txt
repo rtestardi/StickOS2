@@ -1,3 +1,3 @@
-https://www.mouser.com/ProjectManager/ProjectDetail.aspx?AccessID=dad3ac0035
+Flea-Scope BoM at Mouser: https://www.mouser.com/ProjectManager/ProjectDetail.aspx?AccessID=dad3ac0035
 
 The "PIC32MK0512GPK064-I/MR" MCU part is brand new.  If you have trouble finding it, you can use the "GPK" (general purpose) or "MCM" (motor control) flavor, with identical firmware, and you can also use the "1024" (1024kB) or "0512" (512kB) flash size as well.  I find the PIC32MK MCU in its default QFN package with "/MR" suffix (much!) easier to use than the QFP with "/PT" suffix, but the board can also be modified in minutes to use a QFP instead of a QFN -- all traces are laid out for the larger part already.
