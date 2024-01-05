@@ -29,7 +29,7 @@ todo arch:
   move calibration from webpage to firmware, so "scope" returns calibrated data directly and trigger levels use calibrated data
 
 todo html:
-  calibration values should not be stored if outside expected range
+  calibration values should be stored per-volt, and we should allow calibrations at other then 3.3V
   allow "measure" button to drag crosshairs (rather than place dot)
   allow display resize
   horizontal scrolling of trace on chromebook does not work :-(
@@ -43,7 +43,7 @@ todo html:
   aliasing at right and left vertical marker vs. signal
 
 toto StickOS:
-  falling edge trigger level on power supply ripple seems ~0.1V high?
+  falling edge trigger level on power supply ripple seems ~0.1V too high?
   scope should have all interrupts (even usb) disabled for the first 1000ms of trigger (delayed ctrl-c)
   add webusb auto load, allow usb stall, https://developer.chrome.com/articles/build-for-webusb/
   add microsoft usb descriptor
