@@ -770,7 +770,7 @@ wave(char *pattern, int hz)
         DAC2CONbits.ON = 0;  // no CDAC2 on RC10
         g++;
         RPC10R = 9;  // OC11 on RC10
-        min = 20;
+        min = 10;
         max = 4000000;  // 4 MHz
 
     } else {
