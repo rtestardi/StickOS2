@@ -23,6 +23,7 @@ test:
 board:
   for qfp, replace pic32 and remove mask from flag in pcb
   consider adding selectable input prescalers?
+  add 1k resistor in voltage follower feedback loop?
   move switches so no interference when bending panel board to separate?  move mlcc's farther from board edge?
 
 todo arch:
@@ -39,6 +40,7 @@ todo html:
   deeper trace and fft display?
   option to export/import raw data?
   should we have two separate line segments on oor so we don't show red coming up or down the trace?
+  should we have 1 line segment rather than 2 when doing horizontal magnification?
   need js functions to go forward and backward from calibration, and tests that they are reversible!
   aliasing at right and left vertical marker vs. signal
 
@@ -61,7 +63,7 @@ toto StickOS:
   heartbeat led does not blink while waiting for trigger (well, yeah)
   get rid of 80 character line limit?
 
-toto SickOS general:
+todo SickOS general:
 allow gosub to use string expression instead of a label -- gosub state$
 add "eval" command?  add case/switch command?
 allow heartbeat and safemode* on same pin (resistor with switch)!
