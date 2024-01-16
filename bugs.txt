@@ -24,6 +24,7 @@ board:
   for qfp, replace pic32 and remove mask from flag in pcb
   consider adding selectable input prescalers?
   add 1k resistor in voltage follower feedback loop?
+  change 3pF load cap to 6.8pF to get broader compensation support
   move switches so no interference when bending panel board to separate?  move mlcc's farther from board edge?
 
 todo arch:
