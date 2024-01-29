@@ -20,7 +20,10 @@ such a license.
 Same for:
   "pic32.X.27a.0xa849.production.hex",
   "pic32.X.27b.0x45bf.production.hex",
-  "pic32.X.27c.0x50c0.production.hex", and
-  "pic32.X.27d.0x423c.production.hex".
+  "pic32.X.27c.0x50c0.production.hex",
+  "pic32.X.27d.0x423c.production.hex",
+  "pic32.X.27e.0x2a37.production.hex",
+  "pic32.X.27f.0x55c1.production.hex", and
+  "pic32.X.27g.0x7c8e.production.hex".
 
 rtestardi@live.com
