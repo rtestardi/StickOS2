@@ -779,7 +779,7 @@ wave(char *pattern, int hz)
         RPC10R = 0;  // no OC11 on RC10
         DAC2CONbits.ON = 1;  // CDAC2 on RC10
         hz *= WAVES;  // WAVES samples per waveform
-        min = 2;
+        min = 2*WAVES;
         max = 40000*WAVES;  // 40 kHz
     }
 
