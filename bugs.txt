@@ -31,8 +31,6 @@ todo arch:
   move calibration from webpage to firmware, so "scope" returns calibrated data directly and trigger levels use calibrated data
 
 todo html:
-  stickos-basic.htm should also displayhostname
-  flea-scope.htm should display upgrade message for any "g" version checksum, but not for "h" versions
   calibration values should be stored per-volt, and we should allow calibrations at other then 3.3V
   allow "measure" button to drag crosshairs (rather than place dot)
   allow display resize
