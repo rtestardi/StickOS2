@@ -47,8 +47,9 @@ todo html:
   need js functions to go forward and backward from calibration, and tests that they are reversible!
   aliasing at right and left vertical marker vs. signal
 
-toto StickOS:
+todo StickOS:
   falling edge trigger level on power supply ripple seems ~0.1V too high?
+  scope.c: "min = 2;" should be "min = 2*WAVES;"
   scope should have all interrupts (even usb) disabled for the first 1000ms of trigger (delayed ctrl-c)
   add webusb auto load, allow usb stall, https://developer.chrome.com/articles/build-for-webusb/
   add microsoft usb descriptor
