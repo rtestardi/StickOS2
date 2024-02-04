@@ -16,4 +16,6 @@ web-page and you are up and running!
 
 See the Flea Scope™ User's Guide: [https://rtestardi.github.io/usbte/flea-scope.pdf](https://rtestardi.github.io/usbte/flea-scope.pdf)
 
+See the Web USB Flea Scope™ GUI repository: [https://github.com/rtestardi/usbte](https://github.com/rtestardi/usbte)
+
 See the StickOS® BASIC website: [https://rtestardi.github.io/StickOS/](https://rtestardi.github.io/StickOS/)
