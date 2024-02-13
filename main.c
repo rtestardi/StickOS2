@@ -1,5 +1,5 @@
 // *** main.c *********************************************************
-// this is the main program that is launched by startup.c; it just
+// this is the main program that is launched by startup code; it just
 // initializes all of the modules of the os and then runs the main
 // application program loop.
 
@@ -114,7 +114,7 @@ extern int (_ebase_address)();
 extern int (_on_bootstrap)();
 
 int
-main()  // we're called directly by startup.c
+main()  // we're called directly by startup code
 {
     int x;
     byte *p;
