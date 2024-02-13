@@ -66,6 +66,7 @@ todo StickOS:
 
 todo SickOS general:
 allow gosub to use string expression instead of a label -- gosub state$
+do we need more tests for returning from gosub with open scopes?  if, for, etc.
 add "eval" command?  add case/switch command?
 allow heartbeat and safemode* on same pin (resistor with switch)!
 get rid of all code in #defines -- esp ?: and such for flash generations
