@@ -26,6 +26,7 @@ board:
   add 1k resistor in voltage follower feedback loop?
   change 3pF load cap to 6.8pF to get broader compensation support
   move switches so no interference when bending panel board to separate?  move mlcc's farther from board edge?
+  vbus should be connected -- errata shows 10k/20k (1%) divider needed.
 
 todo arch:
   move calibration from webpage to firmware, so "scope" returns calibrated data directly and trigger levels use calibrated data
