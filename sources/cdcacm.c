@@ -125,7 +125,7 @@ static const byte cdcacm_string_descriptor[] = {
     54, // length
     STRING_DESCRIPTOR,
     'g', 0, 'i', 0, 't', 0, 'h', 0, 'u', 0, 'b', 0, '.', 0, 'c', 0, 'o', 0, 'm', 0, '/', 0,
-    'r', 0, 't', 0, 'e', 0, 's', 0, 't', 0, 'a', 0, 'r', 0, 'd', 0, 'i', 0, '/', 0, 'u', 0, 's', 0, 'b', 0, 't', 0, 'e', 0,
+    'r', 0, 't', 0, 'e', 0, 's', 0, 't', 0, 'a', 0, 'r', 0, 'd', 0, 'i', 0, '/', 0, 'p', 0, 'a', 0, 'g', 0, 'e', 0, 's', 0,
 
     24,  // length
     STRING_DESCRIPTOR,
