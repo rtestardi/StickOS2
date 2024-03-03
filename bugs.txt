@@ -67,6 +67,7 @@ todo StickOS:
 
 todo SickOS general:
 dim a$[10]; a$="hello"; uart 2 write a does the wrong thing and sends "hhhhhhhhhh" instead of "hello"
+do we need to add a test for uart tx/rx interrupts? (on uart x input/output do)
 allow gosub to use string expression instead of a label -- gosub state$
 do we need more tests for returning from gosub with open scopes?  if, for, etc.
 add "eval" command?  add case/switch command?
