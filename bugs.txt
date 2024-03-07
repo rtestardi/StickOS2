@@ -47,7 +47,8 @@ todo html:
   aliasing at right and left vertical marker vs. signal
 
 todo StickOS:
-  store cal values in modes rather than vars?
+  allow waveform amplitude to be changed -- have separate const table for reference and RAM table in use
+  store cal values in modes rather than vars, so unaffected by "new"?
   falling edge trigger level on power supply ripple seems ~0.1V too high?
   scope should have all interrupts (even usb) disabled for the first 1000ms of trigger (delayed ctrl-c)
   add webusb auto load, allow usb stall, https://developer.chrome.com/articles/build-for-webusb/
