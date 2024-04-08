@@ -856,6 +856,7 @@ uart_read_write(IN int uart, IN bool write, byte *buffer, int length)
             }
             *buffer = pin_uart_rx(uart);
         }
+        buffer++;
     }
 }
 
