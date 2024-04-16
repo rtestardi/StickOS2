@@ -1,4 +1,4 @@
-history:
+firmware history:
   v2.27  (0x0) initial release
   v2.27a (0x4eec) add flash checksum
   v2.27b (0x45bf) fix flash upgrade, implement uart pin vars
@@ -7,6 +7,12 @@ history:
   v2.27e (0x2a37) disable pullups on pins a0-a8 because they seem incompatible with ADC scanning
   v2.27f (0x55c1) add "ver" command
   v2.27g (0x7c8e) prep for release
+
+board history:
+  2.27f production runs enig spacing
+  2.27g elecrow bnc/usb change
+  2.27h experimental QFP board (with unintentional paste under QFP)
+  2.27i experimental QFP board with no paste under QFP
 
 test:
   confirm checksum
