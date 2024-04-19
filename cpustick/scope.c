@@ -179,7 +179,7 @@ scope_initialize()
 
     TRISB = 0xffff;             // adc2 reads from AN2/RB0
     ANSELB = 0x0003;            // adc3 reads from AN3/RB1
-    CNPUB = ~ANSELB;            // keep inputs at low power
+    //CNPUB = ~ANSELB;          // do not enable pullups for logic analyzer inputs!
 
     TRISC = 0xffff;
     ANSELC = 0x0005;            // oa3in+ is RC2; oa3out is RC0
