@@ -8,6 +8,10 @@ firmware history:
   v2.27f (0x55c1) add "ver" command
   v2.27g (0x7c8e) prep for release
 
+known bugs with current release (v2.27g)
+  weak pull-up resistors (7k-22k) are enabled on logic analyzer inputs by default (which can interfere with i2c)
+  uart read/write of basic array garbles/duplicates data
+
 board history:
   2.27f production runs enig spacing
   2.27g elecrow bnc/usb change
