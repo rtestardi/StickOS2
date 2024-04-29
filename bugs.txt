@@ -31,6 +31,7 @@ test:
   test windows, linux, android, mac, chromebook
 
 board:
+  undo elecrow smt pads for usb -- replace through holes for strength!
   for qfp, replace pic32 and remove mask from flag in pcb
   consider adding selectable input prescalers?  SPI Digital POT?
   add 1k resistor in voltage follower feedback loop?
