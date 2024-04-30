@@ -7,14 +7,15 @@ firmware history:
   v2.27e (0x2a37) disable pullups on pins a0-a8 because they seem incompatible with ADC scanning
   v2.27f (0x55c1) add "ver" command
   v2.27g (0x7c8e) prep for release
+  v2.27h (0x990f) prep for release -- fix bugs #2 and #3
 
-known bugs with current release (v2.27g)
-  weak pull-up resistors (7k-22k) are enabled on logic analyzer inputs by default (which can interfere with i2c)
-  uart read/write of basic array garbles/duplicates data
+known bugs
+  #3 weak pull-up resistors (7k-22k) are enabled on logic analyzer inputs by default (which can interfere with i2c)
+  #2 uart read/write of basic array garbles/duplicates data
 
 board history:
-  2.27f production runs enig spacing
-  2.27g elecrow bnc/usb change
+  2.27f minewing production run enig spacing
+  2.27g elecrow bnc/usb change (usb change to be undone eventually)
   2.27h experimental QFP board (with unintentional paste under QFP)
   2.27i experimental QFP board with no paste under QFP
 
