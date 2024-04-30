@@ -69,7 +69,7 @@ const char * const help_about =
 #else
 #error
 #endif
-"Copyright (c) 2008-2023; all rights reserved.  Patent U.S. 8,117,587.\n"
+"Copyright (c) 2008-2024; all rights reserved.  Patent U.S. 8,117,587.\n"
 "https://github.com/rtestardi/StickOS2\n"
 "rtestardi@live.com\n"
 ;
