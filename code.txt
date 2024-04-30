@@ -152,6 +152,18 @@ uarttest pins:
  110   print rx, rx2
  120 endwhile 
 
+uarttest array:
+  10 configure uart 1 for 300 baud 8 data no parity
+  20 configure uart 2 for 9600 baud 8 data no parity
+  30 dim a[2] as byte, c[2] as byte
+  40 a[0] = 0x55, a[1] = 0xaa
+  50 while 1 do
+  60   sleep 100 ms
+  70   uart 1 write a
+  80   uart 1 read c
+  90   print hex c[0], c[1]
+ 100 endwhile 
+
 breadboard thermometer:
   10 dim reset as pin a8 for digital output
   20 reset = 0, reset = 1

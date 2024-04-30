@@ -25,7 +25,7 @@ test:
   toaster
   simon
   breadboard, including i2c display
-  uart console, uart loopbacks, uart to scope
+  uart console, uarttest (3), uart to scope
   spi ledstrip, display
   all pins analog and digital and pwm
   flash upgrade to debug and -g and back
