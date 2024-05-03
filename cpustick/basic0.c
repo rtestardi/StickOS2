@@ -63,9 +63,9 @@ const char * const commands[] = {
 
 const char * const help_about =
 #if defined(__32MK0512GPK064__)
-"Welcome to StickOS for Microchip PIC32MK0512GPK v" VERSION "!\n"
+"Welcome to StickOS BASIC for Microchip PIC32MK0512GPK v" VERSION "!\n"
 #elif defined(__32MK0512MCM064__)
-"Welcome to StickOS for Microchip PIC32MK0512MCM v" VERSION "!\n"
+"Welcome to StickOS BASIC for Microchip PIC32MK0512MCM v" VERSION "!\n"
 #else
 #error
 #endif
