@@ -788,8 +788,8 @@ for more information:
 
 see also:
   https://rtestardi.github.io/StickOS/
-Welcome to StickOS for Microchip PIC32MK0512GPK v2.27!
-Copyright (c) 2008-2023; all rights reserved.  Patent U.S. 8,117,587.
+Welcome to StickOS BASIC for Microchip PIC32MK0512GPK v2.27!
+Copyright (c) 2008-2024; all rights reserved.  Patent U.S. 8,117,587.
 https://github.com/rtestardi/StickOS2
 rtestardi@live.com
 <Ctrl-C>                      -- stop program
