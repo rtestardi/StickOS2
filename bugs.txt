@@ -46,10 +46,11 @@ todo arch:
   move calibration from webpage to firmware, so "scope" returns calibrated data directly and trigger levels use calibrated data
 
 todo html:
+  horizontal scrolling of trace on chromebook does not work :-(
+  chromebook controls have blue background after input in bw mode
   calibration values should be stored per-volt, and we should allow calibrations at other then 3.3V
   allow "measure" button to drag crosshairs (rather than place dot)
   allow display resize
-  horizontal scrolling of trace on chromebook does not work :-(
   have measure divisions or sample grid for manual clock recovery
   (persistent) labels for binary bits?
   should we have an option for deep scrollable capture, using all of ram?
