@@ -43,6 +43,7 @@ board:
   shrink board and remove qfp support
 
 todo arch:
+  should cdc be only in safe mode, and unbound USB for all others?
   move calibration from webpage to firmware, so "scope" returns calibrated data directly and trigger levels use calibrated data
 
 todo html:
