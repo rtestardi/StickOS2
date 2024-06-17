@@ -4,6 +4,25 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <logicalFolder name="config" displayName="config" projectFiles="true">
+        <logicalFolder name="MK_GPK" displayName="MK_GPK" projectFiles="true">
+          <logicalFolder name="peripheral" displayName="peripheral" projectFiles="true">
+            <logicalFolder name="clk" displayName="clk" projectFiles="true">
+              <itemPath>../src/config/MK_GPK/peripheral/clk/plib_clk.h</itemPath>
+            </logicalFolder>
+            <logicalFolder name="evic" displayName="evic" projectFiles="true">
+              <itemPath>../src/config/MK_GPK/peripheral/evic/plib_evic.h</itemPath>
+            </logicalFolder>
+            <logicalFolder name="gpio" displayName="gpio" projectFiles="true">
+              <itemPath>../src/config/MK_GPK/peripheral/gpio/plib_gpio.h</itemPath>
+            </logicalFolder>
+          </logicalFolder>
+          <itemPath>../src/config/MK_GPK/device.h</itemPath>
+          <itemPath>../src/config/MK_GPK/toolchain_specifics.h</itemPath>
+          <itemPath>../src/config/MK_GPK/interrupts.h</itemPath>
+          <itemPath>../src/config/MK_GPK/definitions.h</itemPath>
+        </logicalFolder>
+      </logicalFolder>
       <logicalFolder name="cpustick" displayName="cpustick" projectFiles="true">
         <itemPath>../cpustick/basic0.h</itemPath>
         <itemPath>../cpustick/cpustick.h</itemPath>
@@ -43,6 +62,7 @@
                    displayName="Important Files"
                    projectFiles="true">
       <itemPath>Makefile</itemPath>
+      <itemPath>pic32.mc3</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -51,10 +71,36 @@
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
                    projectFiles="true">
+      <logicalFolder name="config" displayName="config" projectFiles="true">
+        <logicalFolder name="MK_GPK" displayName="MK_GPK" projectFiles="true">
+          <itemPath>../src/config/MK_GPK/p32MK0512GPK064.ld</itemPath>
+        </logicalFolder>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <logicalFolder name="config" displayName="config" projectFiles="true">
+        <logicalFolder name="MK_GPK" displayName="MK_GPK" projectFiles="true">
+          <logicalFolder name="peripheral" displayName="peripheral" projectFiles="true">
+            <logicalFolder name="clk" displayName="clk" projectFiles="true">
+              <itemPath>../src/config/MK_GPK/peripheral/clk/plib_clk.c</itemPath>
+            </logicalFolder>
+            <logicalFolder name="evic" displayName="evic" projectFiles="true">
+              <itemPath>../src/config/MK_GPK/peripheral/evic/plib_evic.c</itemPath>
+            </logicalFolder>
+            <logicalFolder name="gpio" displayName="gpio" projectFiles="true">
+              <itemPath>../src/config/MK_GPK/peripheral/gpio/plib_gpio.c</itemPath>
+            </logicalFolder>
+          </logicalFolder>
+          <logicalFolder name="stdio" displayName="stdio" projectFiles="true">
+            <itemPath>../src/config/MK_GPK/stdio/xc32_monitor.c</itemPath>
+          </logicalFolder>
+          <itemPath>../src/config/MK_GPK/interrupts.c</itemPath>
+          <itemPath>../src/config/MK_GPK/exceptions.c</itemPath>
+          <itemPath>../src/config/MK_GPK/initialization.c</itemPath>
+        </logicalFolder>
+      </logicalFolder>
       <logicalFolder name="cpustick" displayName="cpustick" projectFiles="true">
         <itemPath>../cpustick/basic0.c</itemPath>
         <itemPath>../cpustick/cpustick.c</itemPath>
@@ -88,6 +134,7 @@
       </logicalFolder>
       <itemPath>../main.c</itemPath>
       <itemPath>../myplib.c</itemPath>
+      <itemPath>../src/main.c</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
@@ -101,7 +148,7 @@
         <targetDevice>PIC32MK0512GPK064</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>snap</platformTool>
+        <platformTool>pkob4hybrid</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>4.35</languageToolchainVersion>
         <platform>3</platform>
@@ -137,21 +184,22 @@
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
       <C32>
-        <property key="additional-warnings" value="false"/>
+        <property key="additional-warnings" value="true"/>
         <property key="addresss-attribute-use" value="false"/>
+        <property key="appendMe" value="-fno-builtin"/>
         <property key="enable-app-io" value="false"/>
         <property key="enable-omit-frame-pointer" value="true"/>
         <property key="enable-symbols" value="true"/>
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="true"/>
         <property key="extra-include-directories"
-                  value="..;../pict-o-crypt;../cpustick;../headers;../sources;../stickos"/>
+                  value="..;../cpustick;../headers;../pict-o-crypt;../sources;../src;../src/config/MK_GPK;../stickos"/>
         <property key="generate-16-bit-code" value="true"/>
-        <property key="generate-micro-compressed-code" value="true"/>
-        <property key="isolate-each-function" value="false"/>
-        <property key="make-warnings-into-errors" value="false"/>
-        <property key="optimization-level" value="-Os"/>
-        <property key="place-data-into-section" value="false"/>
+        <property key="generate-micro-compressed-code" value="false"/>
+        <property key="isolate-each-function" value="true"/>
+        <property key="make-warnings-into-errors" value="true"/>
+        <property key="optimization-level" value="-O1"/>
+        <property key="place-data-into-section" value="true"/>
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
         <property key="preprocessor-macros" value="STICKOS"/>
@@ -196,6 +244,7 @@
         <property key="additional-options-use-response-files" value="false"/>
         <property key="additional-options-write-sla" value="false"/>
         <property key="allocate-dinit" value="false"/>
+        <property key="appendMe" value=""/>
         <property key="code-dinit" value="false"/>
         <property key="ebase-addr" value=""/>
         <property key="enable-check-sections" value="false"/>
@@ -213,13 +262,13 @@
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-cross-reference-file" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
-        <property key="heap-size" value="0"/>
+        <property key="heap-size" value="512"/>
         <property key="input-libraries" value=""/>
         <property key="kseg-length" value=""/>
         <property key="kseg-origin" value=""/>
         <property key="linker-symbols" value=""/>
         <property key="map-file" value="&quot;$(BINDIR_)$(TARGETBASE).map&quot;"/>
-        <property key="no-device-startup-code" value="false"/>
+        <property key="no-device-startup-code" value="true"/>
         <property key="no-startup-files" value="false"/>
         <property key="oXC32ld-extra-opts" value=""/>
         <property key="optimization-level" value=""/>
@@ -236,6 +285,7 @@
       <C32CPP>
         <property key="additional-warnings" value="false"/>
         <property key="addresss-attribute-use" value="false"/>
+        <property key="appendMe" value=""/>
         <property key="check-new" value="false"/>
         <property key="eh-specs" value="true"/>
         <property key="enable-app-io" value="false"/>
@@ -244,12 +294,12 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exceptions" value="true"/>
         <property key="exclude-floating-point" value="false"/>
-        <property key="extra-include-directories" value=""/>
+        <property key="extra-include-directories" value="../src;../src/config/MK_GPK"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
-        <property key="isolate-each-function" value="false"/>
+        <property key="isolate-each-function" value="true"/>
         <property key="make-warnings-into-errors" value="false"/>
-        <property key="optimization-level" value=""/>
+        <property key="optimization-level" value="-O1"/>
         <property key="place-data-into-section" value="false"/>
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
