@@ -93,7 +93,7 @@ scope_isr()
         o = adcbuffer + currento;
         lasto = o + sizeof(dmabuffer)/2/sizeof(*o);
 
-        // copy to dmabuffer to adcbuffer
+        // copy from dmabuffer to adcbuffer
         while (o < lasto) {
             *o++ = *i0++;
             *o++ = *i1++;
