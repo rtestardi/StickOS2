@@ -432,10 +432,10 @@ solderless:
   60 endwhile 
 
 morse:
-  10 dim i, ms, input$[79], codes[128]
+  10 dim i, ms, freq, input$[79], codes[128]
   20 dim gnd as pin a7 for digital output
   30 dim buzzer as pin a8 for frequency output
-  40 ms = 100, gnd = 0
+  40 ms = 100, freq = 800, gnd = 0
   50 gosub init
   60 while 1 do
   70   input input$
@@ -451,10 +451,10 @@ morse:
  170   while code do
  180     key = code&3
  190     if key==1 then
- 200       buzzer = 2000
+ 200       buzzer = freq
  210       sleep ms ms
  220     elseif key==2 then
- 230       buzzer = 2000
+ 230       buzzer = freq
  240       sleep 3*ms ms
  250     endif 
  260     buzzer = 0
