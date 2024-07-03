@@ -461,7 +461,7 @@ morse:
  270     sleep ms ms
  280     code = code>>2
  290   endwhile 
- 300   sleep 3*ms ms
+ 300   sleep 2*ms ms
  310 endsub 
  320 sub init
  330   dim a, b
@@ -482,7 +482,7 @@ morse:
  480 data '7', 0x15a
  490 data '8', 0x16a
  500 data '9', 0x1aa
- 510 data ' ', 0
+ 510 data ' ', 0xff
  520 data 'a', 0x9
  530 data 'b', 0x56
  540 data 'c', 0x66
