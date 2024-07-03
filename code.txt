@@ -432,7 +432,7 @@ solderless:
   60 endwhile 
 
 morse:
-  10 dim i, ms, input$[79], letter, letters[128]
+  10 dim i, ms, input$[79], code, codes[128]
   20 dim gnd as pin a7 for digital output
   30 dim buzzer as pin a8 for frequency output
   40 ms = 100, gnd = 0
@@ -445,11 +445,11 @@ morse:
  110   print ""
  120 endwhile 
  130 end 
- 140 sub morse c
+ 140 sub morse letter
  150   dim key
- 160   let letter = letters[c]
- 170   while letter do
- 180     key = letter&3
+ 160   code = codes[letter]
+ 170   while code do
+ 180     key = code&3
  190     if key==1 then
  200       buzzer = 2000
  210       sleep ms ms
@@ -459,7 +459,7 @@ morse:
  250     endif 
  260     buzzer = 0
  270     sleep ms ms
- 280     let letter = letter>>2
+ 280     code = code>>2
  290   endwhile 
  300   sleep 2*ms ms
  310 endsub 
@@ -468,7 +468,7 @@ morse:
  340   do 
  350     read a, b
  360     if a then
- 370       let letters[a] = b
+ 370       codes[a] = b
  380     endif 
  390   until !a
  400 endsub 
