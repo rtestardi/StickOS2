@@ -430,3 +430,83 @@ solderless:
   40     sleep 100 ms
   50   next 
   60 endwhile 
+
+morse:
+  10 dim i, ms, input$[79], letter, letters[128]
+  20 dim gnd as pin a7 for digital output
+  30 dim buzzer as pin a8 for frequency output
+  40 ms = 100, gnd = 0
+  50 gosub init
+  60 while 1 do
+  70   input input$
+  80   for i = 0 to input#-1
+  90     gosub morse input[i]
+ 100   next 
+ 110   print ""
+ 120 endwhile 
+ 130 end 
+ 140 sub morse c
+ 150   dim key
+ 160   let letter = letters[c]
+ 170   while letter do
+ 180     key = letter&3
+ 190     if key==1 then
+ 200       buzzer = 2000
+ 210       sleep ms ms
+ 220     elseif key==2 then
+ 230       buzzer = 2000
+ 240       sleep 3*ms ms
+ 250     endif 
+ 260     buzzer = 0
+ 270     sleep ms ms
+ 280     let letter = letter>>2
+ 290   endwhile 
+ 300   sleep 2*ms ms
+ 310 endsub 
+ 320 sub init
+ 330   dim a, b
+ 340   do 
+ 350     read a, b
+ 360     if a then
+ 370       let letters[a] = b
+ 380     endif 
+ 390   until !a
+ 400 endsub 
+ 410 data '0', 0x2aa
+ 420 data '1', 0x2a9
+ 430 data '2', 0x2a5
+ 440 data '3', 0x295
+ 450 data '4', 0x255
+ 460 data '5', 0x155
+ 470 data '6', 0x156
+ 480 data '7', 0x15a
+ 490 data '8', 0x16a
+ 500 data '9', 0x1aa
+ 510 data ' ', 0
+ 520 data 'a', 0x9
+ 530 data 'b', 0x56
+ 540 data 'c', 0x66
+ 550 data 'd', 0x16
+ 560 data 'e', 0x1
+ 570 data 'f', 0x65
+ 580 data 'g', 0x1a
+ 590 data 'h', 0x55
+ 600 data 'i', 0x5
+ 610 data 'j', 0xa9
+ 620 data 'k', 0x26
+ 630 data 'l', 0x59
+ 640 data 'm', 0xa
+ 650 data 'n', 0x6
+ 660 data 'o', 0x2a
+ 670 data 'p', 0x69
+ 680 data 'q', 0x9a
+ 690 data 'r', 0x19
+ 700 data 's', 0x15
+ 710 data 't', 0x2
+ 720 data 'u', 0x25
+ 730 data 'v', 0x95
+ 740 data 'w', 0x29
+ 750 data 'x', 0x96
+ 760 data 'y', 0xa6
+ 770 data 'z', 0x5a
+ 780 data 0, 0
