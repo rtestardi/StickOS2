@@ -180,6 +180,9 @@ scope_initialize()
     TRISB = 0xffff;             // adc2 reads from AN2/RB0
     ANSELB = 0x0003;            // adc3 reads from AN3/RB1
     //CNPUB = ~ANSELB;          // do not enable pullups for logic analyzer inputs!
+    CNPUB = 0x0080;             // enable pullup only for a0(not AN0)/RB7
+
+    force_winusb = ! (PORTB & 0x0080);  // if pin a0 is grounded, force winusb instead of CDC/ACM for samsung phones
 
     TRISC = 0xffff;
     ANSELC = 0x0005;            // oa3in+ is RC2; oa3out is RC0

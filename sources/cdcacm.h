@@ -1,5 +1,7 @@
 // *** cdcacm.h *******************************************************
 
+extern bool force_winusb;
+
 extern bool cdcacm_active;
 
 typedef void (*cdcacm_reset_cbfn)(void);

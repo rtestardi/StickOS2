@@ -7,6 +7,8 @@
 
 #include "main.h"
 
+bool force_winusb;
+
 #define PACKET_SIZE  64
 
 // FTDI: We have allocated 8 PIDs to you from A660 to A667 (hex).
@@ -498,7 +500,7 @@ cdcacm_register(cdcacm_reset_cbfn reset, cdcacm_receive_cbfn receive)
     assert(check(cdcacm_device_descriptor, sizeof(cdcacm_device_descriptor)) == 1);
     usb_device_descriptor(cdcacm_device_descriptor, sizeof(cdcacm_device_descriptor));
 
-    if (disable_autorun) {
+    if (force_winusb) {
         assert(check(winusb_configuration_descriptor, sizeof(winusb_configuration_descriptor)) == 10);
         usb_configuration_descriptor(winusb_configuration_descriptor, sizeof(winusb_configuration_descriptor));
     } else {
