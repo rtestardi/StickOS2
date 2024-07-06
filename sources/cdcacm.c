@@ -60,7 +60,79 @@ static const byte cdcacm_configuration_descriptor[] = {
     0x00,  // interface number
     0x00,  // alternate
     0x01,  // num endpoints
-    0x02, 0x02,  // interface class (comm), subclass (acm); bulk explicitly using winusb.sys: 0xff, 0x00; cdc/acm: 0x02, 0x02
+    0x02, 0x02,  // interface class (comm), subclass (acm)
+    0x01,  // protocol (at)
+    0x00,  // interface (string)
+
+    5,  // length
+    0x24,  // header functional descriptor
+    0x00,
+    0x10, 0x01,
+
+    5,  // length
+    0x24,  // call management functional descriptor
+    0x01,
+    0x00,
+    0x01,
+
+    4,  // length
+    0x24,  // abstract control model descriptor
+    0x02,
+    0x00,
+
+    5,  // length
+    0x24,  // union functional descriptor
+    0x06,
+    0x00,  // comm
+    0x01,  // data
+
+    7,  // length
+    ENDPOINT_DESCRIPTOR,
+    0x81,  // endpoint IN address
+    0x03,  // attributes: interrupt
+    0x08, 0x00,  // packet size
+    0x10,  // interval (ms)
+
+    9,  // length
+    INTERFACE_DESCRIPTOR,
+    0x01,  // interface number
+    0x00,  // alternate
+    0x02,  // num endpoints
+    0x0a, 0x00,  // interface class (data), subclass
+    0x00,  // protocol
+    0x00,  // interface (string)
+
+    7,  // length
+    ENDPOINT_DESCRIPTOR,
+    0x82,  // endpoint IN address
+    0x02,  // attributes: bulk
+    0x40, 0x00,  // packet size
+    0x00,  // interval (ms)
+
+    7,  // length
+    ENDPOINT_DESCRIPTOR,
+    0x03,  // endpoint OUT address
+    0x02,  // attributes: bulk
+    0x40, 0x00,  // packet size
+    0x00,  // interval (ms)
+};
+
+static const byte winusb_configuration_descriptor[] = {
+    9,  // length
+    CONFIGURATION_DESCRIPTOR,
+    67, 0,  // total length
+    0x02,  // num interfaces
+    0x01,  // configuration value
+    0x00,  // configuration (string)
+    0x80,  // attributes
+    250,  // 500 mA
+
+    9,  // length
+    INTERFACE_DESCRIPTOR,
+    0x00,  // interface number
+    0x00,  // alternate
+    0x01,  // num endpoints
+    0xff, 0x00,  // interface class (winusb)
     0x01,  // protocol (at)
     0x00,  // interface (string)
 
@@ -426,8 +498,13 @@ cdcacm_register(cdcacm_reset_cbfn reset, cdcacm_receive_cbfn receive)
     assert(check(cdcacm_device_descriptor, sizeof(cdcacm_device_descriptor)) == 1);
     usb_device_descriptor(cdcacm_device_descriptor, sizeof(cdcacm_device_descriptor));
 
-    assert(check(cdcacm_configuration_descriptor, sizeof(cdcacm_configuration_descriptor)) == 10);
-    usb_configuration_descriptor(cdcacm_configuration_descriptor, sizeof(cdcacm_configuration_descriptor));
+    if (disable_autorun) {
+        assert(check(winusb_configuration_descriptor, sizeof(winusb_configuration_descriptor)) == 10);
+        usb_configuration_descriptor(winusb_configuration_descriptor, sizeof(winusb_configuration_descriptor));
+    } else {
+        assert(check(cdcacm_configuration_descriptor, sizeof(cdcacm_configuration_descriptor)) == 10);
+        usb_configuration_descriptor(cdcacm_configuration_descriptor, sizeof(cdcacm_configuration_descriptor));
+    }
 
     assert(check(cdcacm_string_descriptor, sizeof(cdcacm_string_descriptor)) == 3);
     usb_string_descriptor(cdcacm_string_descriptor, sizeof(cdcacm_string_descriptor));
