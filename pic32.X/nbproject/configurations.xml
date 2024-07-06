@@ -4,25 +4,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <logicalFolder name="config" displayName="config" projectFiles="true">
-        <logicalFolder name="MK_GPK" displayName="MK_GPK" projectFiles="true">
-          <logicalFolder name="peripheral" displayName="peripheral" projectFiles="true">
-            <logicalFolder name="clk" displayName="clk" projectFiles="true">
-              <itemPath>../src/config/MK_GPK/peripheral/clk/plib_clk.h</itemPath>
-            </logicalFolder>
-            <logicalFolder name="evic" displayName="evic" projectFiles="true">
-              <itemPath>../src/config/MK_GPK/peripheral/evic/plib_evic.h</itemPath>
-            </logicalFolder>
-            <logicalFolder name="gpio" displayName="gpio" projectFiles="true">
-              <itemPath>../src/config/MK_GPK/peripheral/gpio/plib_gpio.h</itemPath>
-            </logicalFolder>
-          </logicalFolder>
-          <itemPath>../src/config/MK_GPK/device.h</itemPath>
-          <itemPath>../src/config/MK_GPK/toolchain_specifics.h</itemPath>
-          <itemPath>../src/config/MK_GPK/interrupts.h</itemPath>
-          <itemPath>../src/config/MK_GPK/definitions.h</itemPath>
-        </logicalFolder>
-      </logicalFolder>
       <logicalFolder name="cpustick" displayName="cpustick" projectFiles="true">
         <itemPath>../cpustick/basic0.h</itemPath>
         <itemPath>../cpustick/cpustick.h</itemPath>
@@ -80,27 +61,6 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <logicalFolder name="config" displayName="config" projectFiles="true">
-        <logicalFolder name="MK_GPK" displayName="MK_GPK" projectFiles="true">
-          <logicalFolder name="peripheral" displayName="peripheral" projectFiles="true">
-            <logicalFolder name="clk" displayName="clk" projectFiles="true">
-              <itemPath>../src/config/MK_GPK/peripheral/clk/plib_clk.c</itemPath>
-            </logicalFolder>
-            <logicalFolder name="evic" displayName="evic" projectFiles="true">
-              <itemPath>../src/config/MK_GPK/peripheral/evic/plib_evic.c</itemPath>
-            </logicalFolder>
-            <logicalFolder name="gpio" displayName="gpio" projectFiles="true">
-              <itemPath>../src/config/MK_GPK/peripheral/gpio/plib_gpio.c</itemPath>
-            </logicalFolder>
-          </logicalFolder>
-          <logicalFolder name="stdio" displayName="stdio" projectFiles="true">
-            <itemPath>../src/config/MK_GPK/stdio/xc32_monitor.c</itemPath>
-          </logicalFolder>
-          <itemPath>../src/config/MK_GPK/interrupts.c</itemPath>
-          <itemPath>../src/config/MK_GPK/exceptions.c</itemPath>
-          <itemPath>../src/config/MK_GPK/initialization.c</itemPath>
-        </logicalFolder>
-      </logicalFolder>
       <logicalFolder name="cpustick" displayName="cpustick" projectFiles="true">
         <itemPath>../cpustick/basic0.c</itemPath>
         <itemPath>../cpustick/cpustick.c</itemPath>
@@ -186,7 +146,6 @@
       <C32>
         <property key="additional-warnings" value="true"/>
         <property key="addresss-attribute-use" value="false"/>
-        <property key="appendMe" value="-fno-builtin"/>
         <property key="enable-app-io" value="false"/>
         <property key="enable-omit-frame-pointer" value="true"/>
         <property key="enable-symbols" value="true"/>
@@ -244,7 +203,6 @@
         <property key="additional-options-use-response-files" value="false"/>
         <property key="additional-options-write-sla" value="false"/>
         <property key="allocate-dinit" value="false"/>
-        <property key="appendMe" value=""/>
         <property key="code-dinit" value="false"/>
         <property key="ebase-addr" value=""/>
         <property key="enable-check-sections" value="false"/>
@@ -285,7 +243,6 @@
       <C32CPP>
         <property key="additional-warnings" value="false"/>
         <property key="addresss-attribute-use" value="false"/>
-        <property key="appendMe" value=""/>
         <property key="check-new" value="false"/>
         <property key="eh-specs" value="true"/>
         <property key="enable-app-io" value="false"/>
@@ -471,6 +428,7 @@
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.simultaneous.debug" value="false"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="event.recorder.debugger.behavior" value="Running"/>
         <property key="event.recorder.enabled" value="false"/>
         <property key="event.recorder.scvd.files" value=""/>
         <property key="freeze.timers" value="false"/>
@@ -893,6 +851,7 @@
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.simultaneous.debug" value="false"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="event.recorder.debugger.behavior" value="Running"/>
         <property key="event.recorder.enabled" value="false"/>
         <property key="event.recorder.scvd.files" value=""/>
         <property key="freeze.timers" value="false"/>
