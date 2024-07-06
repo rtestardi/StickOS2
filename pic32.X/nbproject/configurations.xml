@@ -101,7 +101,7 @@
         <targetDevice>PIC32MK0512GPK064</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>noID</platformTool>
+        <platformTool>snap</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>4.35</languageToolchainVersion>
         <platform>3</platform>
