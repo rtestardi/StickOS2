@@ -8,7 +8,7 @@ firmware history:
   v2.27f (0x55c1) add "ver" command
   v2.27g (0x7c8e) prep for release
   v2.27h (0x990f) prep for release -- fix bugs #2 and #3
-  v2.27j (0x39ca) prep for release -- fix bug #5, add usb sn
+  v2.27j (0x39ca) prep for release -- fix bug #5, add usb sn -- DO NOT USE PIN a0 DURING BOOT EXCEPT TO FORCE NON-CDC/ACM USB ENDPOINT
 
 known bugs
   #5 Some Samsung phones claim Flea-Scope with serial driver but do not expose Web Serial...
