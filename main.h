@@ -2,7 +2,7 @@
 
 #ifndef MAIN_INCLUDED
 
-#define VERSION  "2.27j"
+#define VERSION  "2.27k"
 
 //#define SODEBUG  1
 #define DEBUGGING  1  // enable to use mplab x debugger
