@@ -8,7 +8,7 @@ firmware history:
   v2.27f (0x55c1) add "ver" command
   v2.27g (0x7c8e) prep for release
   v2.27h (0x990f) prep for release -- fix bugs #2 and #3
-  v2.27j (testing in progress) -- fix bug #5, add usb sn
+  v2.27j (0x39ca) prep for release -- fix bug #5, add usb sn
 
 known bugs
   #5 Some Samsung phones claim Flea-Scope with serial driver but do not expose Web Serial...
@@ -41,7 +41,7 @@ board:
   change 3pF load cap to 6.8pF to get broader compensation support
   move switches so no interference when bending panel board to separate?  move mlcc's farther from board edge?
   vbus should be connected -- errata shows 10k/20k (1%) divider needed.
-  switch to usb C vonnector
+  switch to usb C connector
   shrink board and remove qfp support
 
 todo arch:
