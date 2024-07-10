@@ -43,6 +43,7 @@
                    displayName="Important Files"
                    projectFiles="true">
       <itemPath>Makefile</itemPath>
+      <itemPath>pic32.mc3</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -145,13 +146,13 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="true"/>
         <property key="extra-include-directories"
-                  value="..;../cpustick;../headers;../pict-o-crypt;../sources;../src;../src/config/MK_GPK;../stickos"/>
+                  value="..;../pict-o-crypt;../cpustick;../headers;../sources;../stickos"/>
         <property key="generate-16-bit-code" value="true"/>
         <property key="generate-micro-compressed-code" value="true"/>
-        <property key="isolate-each-function" value="true"/>
-        <property key="make-warnings-into-errors" value="true"/>
+        <property key="isolate-each-function" value="false"/>
+        <property key="make-warnings-into-errors" value="false"/>
         <property key="optimization-level" value="-Os"/>
-        <property key="place-data-into-section" value="true"/>
+        <property key="place-data-into-section" value="false"/>
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
         <property key="preprocessor-macros" value="STICKOS"/>
@@ -213,13 +214,13 @@
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-cross-reference-file" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
-        <property key="heap-size" value="512"/>
+        <property key="heap-size" value="0"/>
         <property key="input-libraries" value=""/>
         <property key="kseg-length" value=""/>
         <property key="kseg-origin" value=""/>
         <property key="linker-symbols" value=""/>
         <property key="map-file" value="&quot;$(BINDIR_)$(TARGETBASE).map&quot;"/>
-        <property key="no-device-startup-code" value="true"/>
+        <property key="no-device-startup-code" value="false"/>
         <property key="no-startup-files" value="false"/>
         <property key="oXC32ld-extra-opts" value=""/>
         <property key="optimization-level" value=""/>
@@ -244,12 +245,12 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exceptions" value="true"/>
         <property key="exclude-floating-point" value="false"/>
-        <property key="extra-include-directories" value="../src;../src/config/MK_GPK"/>
+        <property key="extra-include-directories" value=""/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
-        <property key="isolate-each-function" value="true"/>
+        <property key="isolate-each-function" value="false"/>
         <property key="make-warnings-into-errors" value="false"/>
-        <property key="optimization-level" value="-O1"/>
+        <property key="optimization-level" value=""/>
         <property key="place-data-into-section" value="false"/>
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
@@ -421,7 +422,6 @@
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.simultaneous.debug" value="false"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
-        <property key="event.recorder.debugger.behavior" value="Running"/>
         <property key="event.recorder.enabled" value="false"/>
         <property key="event.recorder.scvd.files" value=""/>
         <property key="freeze.timers" value="false"/>
@@ -710,9 +710,9 @@
         <property key="UART4" value="true"/>
         <property key="UART5" value="true"/>
         <property key="UART6" value="true"/>
-        <property key="communication.interface" value="swd"/>
+        <property key="communication.interface" value=""/>
         <property key="communication.interface.jtag" value="2wire"/>
-        <property key="communication.speed" value="2.000"/>
+        <property key="communication.speed" value="${communication.speed.default}"/>
         <property key="debugoptions.debug-startup" value="Use system settings"/>
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.simultaneous.debug" value="false"/>
@@ -730,7 +730,7 @@
         <property key="memories.instruction.ram.ranges"
                   value="${memories.instruction.ram.ranges}"/>
         <property key="memories.programmemory" value="true"/>
-        <property key="memories.programmemory.ranges" value="1d000000-1d07ffff"/>
+        <property key="memories.programmemory.ranges" value="1d000000-1d0fffff"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.pgmentry.voltage" value="low"/>
@@ -844,7 +844,6 @@
         <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.simultaneous.debug" value="false"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
-        <property key="event.recorder.debugger.behavior" value="Running"/>
         <property key="event.recorder.enabled" value="false"/>
         <property key="event.recorder.scvd.files" value=""/>
         <property key="freeze.timers" value="false"/>
