@@ -38,12 +38,10 @@ struct setup {
 
 extern volatile bool usb_in_isr;  // set when in isr
 
-extern bool scsi_attached;  // set when usb mass storage device is attached
-extern uint32 scsi_attached_count;
-extern bool other_attached;
-
 extern bool cdcacm_attached;  // set when cdcacm host is attached
 extern uint32 cdcacm_attached_count;
+
+extern char usb_serial[33];
 
 extern byte bulk_in_ep;
 extern byte bulk_out_ep;

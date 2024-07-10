@@ -67,13 +67,10 @@ volatile int32 usb_out_ticks;
 volatile int32 usb_max_ticks;
 #endif
 
-bool cdc_attached;  // set when cdc acm device is attached
-bool scsi_attached;  // set when usb mass storage device is attached
-uint32 scsi_attached_count;
-bool other_attached;  // set when other device is attached
-
 bool cdcacm_attached;  // set when cdcacm host is attached
 uint32 cdcacm_attached_count;
+
+char usb_serial[33];
 
 static
 void
@@ -347,9 +344,14 @@ usb_isr(void)
                             assert(string_descriptor[j]);
                             endpoints[endpoint].data_length = MIN(string_descriptor[j], length);
                             memcpy(endpoints[endpoint].data_buffer, string_descriptor+j, endpoints[endpoint].data_length);
-                            if (endpoints[endpoint].data_buffer[2] == '@') {
-                                // patch in the hostname
-                                p = var_get_flash_name();
+                            if (endpoints[endpoint].data_buffer[2] == '@' || endpoints[endpoint].data_buffer[2] == '#') {
+                                if (endpoints[endpoint].data_buffer[2] == '@') {
+                                    // patch in the hostname
+                                    p = var_get_flash_name();
+                                } else {
+                                    // patch in the serial number
+                                    p = usb_serial;
+                                }
                                 endpoints[endpoint].data_buffer[0] = 2 + strlen(p)*2;
                                 endpoints[endpoint].data_length = MIN(endpoints[endpoint].data_buffer[0], length);
                                 for (j = 2; j < endpoints[endpoint].data_length; j += 2) {
@@ -605,6 +607,8 @@ void
 usb_initialize(void)
 {
     static __attribute__ ((aligned(512))) byte bdt_ram[BDT_RAM_SIZE];
+    
+    snprintf(usb_serial, sizeof(usb_serial), "%08x%08x%08x", DEVSN3^DEVSN2, DEVSN1, DEVSN0);
 
     bdts = (struct bdt *)bdt_ram;
 

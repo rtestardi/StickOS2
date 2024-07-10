@@ -43,7 +43,7 @@ static const byte cdcacm_device_descriptor[] = {
     CDCACM_RID%0x100, CDCACM_RID/0x100,
     0x01,  // manufacturer (string)
     0x02,  // product (string)
-    0x00,  // sn (string)
+    0x03,  // sn (string)
     0x01  // num configurations
 };
 
@@ -204,6 +204,10 @@ static const byte cdcacm_string_descriptor[] = {
     24,  // length
     STRING_DESCRIPTOR,
     '@', 0, 'F', 0, 'l', 0, 'e', 0, 'a', 0, '-', 0, 'S', 0, 'c', 0, 'o', 0, 'p', 0, 'e', 0,
+
+    52,  // length
+    STRING_DESCRIPTOR,
+    '#', 0, '0', 0, '0', 0, '0', 0, '0', 0, '1', 0, '1', 0, '1', 0, '1', 0, '2', 0, '2', 0, '2', 0, '2', 0, '3', 0, '3', 0, '3', 0, '3', 0, '4', 0, '4', 0, '4', 0, '4', 0, '5', 0, '5', 0, '5', 0, '5', 0,
 };
 
 bool cdcacm_active;
