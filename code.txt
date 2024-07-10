@@ -1,7 +1,7 @@
 toaster:
   10 dim target, secs
   20 dim thermocouple as pin a8 for analog input
-  30 dim relay as pin a0 for digital output
+  30 dim relay as pin a1 for digital output
   40 dim buzzer as pin a6 for frequency output
   50 data 512, 90, 746, 105, 894, 20, -1, -1
   60 configure timer 0 for 1 s
