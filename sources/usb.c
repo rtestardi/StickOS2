@@ -607,7 +607,7 @@ void
 usb_initialize(void)
 {
     static __attribute__ ((aligned(512))) byte bdt_ram[BDT_RAM_SIZE];
-    
+
     snprintf(usb_serial, sizeof(usb_serial), "%08x%08x%08x", DEVSN3^DEVSN2, DEVSN1, DEVSN0);
 
     bdts = (struct bdt *)bdt_ram;
