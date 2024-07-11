@@ -65,6 +65,7 @@ todo html:
   aliasing at right and left vertical marker vs. signal
 
 todo StickOS:
+  seed random number generator with DEVSN0?  Or something random on boot???
   allow waveform amplitude to be changed -- have separate const table for reference and RAM table in use
   store cal values in modes rather than vars, so unaffected by "new"?
   falling edge trigger level on power supply ripple seems ~0.1V too high?
