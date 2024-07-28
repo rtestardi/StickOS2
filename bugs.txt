@@ -11,7 +11,7 @@ firmware history:
   v2.27j (0x39ca) prep for release -- fix bug #5, add usb sn -- DO NOT USE PIN a0 DURING BOOT EXCEPT TO FORCE NON-CDC/ACM USB ENDPOINT
 
 known bugs
-  #5 Some Samsung phones claim Flea-Scope with serial driver but do not expose Web Serial...
+  #5 Some Samsung phones claim Flea-Scope with serial driver but do not expose Web Serial, leaving Flea-Scope inaccessible...
   #3 weak pull-up resistors (7k-22k) are enabled on logic analyzer inputs by default (which can interfere with i2c)
   #2 uart read/write of basic array garbles/duplicates data
 
