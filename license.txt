@@ -23,7 +23,9 @@ Same for:
   "pic32.X.27c.0x50c0.production.hex",
   "pic32.X.27d.0x423c.production.hex",
   "pic32.X.27e.0x2a37.production.hex",
-  "pic32.X.27f.0x55c1.production.hex", and
-  "pic32.X.27g.0x7c8e.production.hex".
+  "pic32.X.27f.0x55c1.production.hex",
+  "pic32.X.27g.0x7c8e.production.hex",
+  "pic32.X.27h.0x990f.production.hex", and
+  "pic32.X.27j.0x39ca.production.hex".
 
 rtestardi@live.com
