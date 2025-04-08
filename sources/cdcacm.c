@@ -512,7 +512,7 @@ cdcacm_register(cdcacm_reset_cbfn reset, cdcacm_receive_cbfn receive)
         usb_configuration_descriptor(cdcacm_configuration_descriptor, sizeof(cdcacm_configuration_descriptor));
     }
 
-    assert(check(cdcacm_string_descriptor, sizeof(cdcacm_string_descriptor)) == 3);
+    assert(check(cdcacm_string_descriptor, sizeof(cdcacm_string_descriptor)) == 4);
     usb_string_descriptor(cdcacm_string_descriptor, sizeof(cdcacm_string_descriptor));
 }
 

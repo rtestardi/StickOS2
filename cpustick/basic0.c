@@ -24,7 +24,6 @@ enum cmdcode {
 #endif
 #if SCOPE && ! STICK_GUEST
     command_scope,
-    command_wave,
     command_ver,
 #endif
     command_hostname,
@@ -52,7 +51,6 @@ const char * const commands[] = {
 #endif
 #if SCOPE && ! STICK_GUEST
     "scope",
-    "wave",
     "ver",
 #endif
     "hostname",
@@ -816,26 +814,6 @@ basic0_run(char *text_in)
             }
 
             scope(number1, rise, fall, level, automatic, digital, number2, number3, number4);
-            break;
-
-        case command_wave:
-            // save the pattern (and frequency following)
-            pattern = text;
-
-            // skip the pattern
-            while (*text && ! isspace(*text)) {
-                text++;
-            }
-
-            // skip any spaces
-            parse_trim(&text);
-
-            // get the frequency
-            if (*text && (! basic_const(&text, &number2) || number2 < 0 || number2 > 10000000)) {
-                goto XXX_ERROR_XXX;
-            }
-
-            wave(pattern, number2);
             break;
 
         case command_ver:

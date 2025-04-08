@@ -638,12 +638,9 @@
   <ItemGroup>
     <None Include="..\test\basic.sh" />
     <None Include="..\test\basic.txt" />
-    <None Include="..\test\basic2.sh" />
-    <None Include="..\test\basic2.txt" />
     <None Include="..\test\basic3.sh" />
     <None Include="..\test\basic3.txt" />
     <None Include="..\test\test.sh" />
-    <None Include="..\test\test2.sh" />
     <None Include="..\test\test3.sh" />
     <None Include="..\build\Makefile.def" />
     <None Include="..\build\Makefile.windows" />

@@ -665,6 +665,20 @@ run
 cont
 EOF
 
+echo wave statements
+"$BASIC" -q <<'EOF'
+10 dim pot
+20 pot=3000
+30 wave square pot*2
+40 wave sine pot
+50 wave triangle pot*3
+60 wave ekg 0
+70 wave xxx 0
+80 wave square
+list
+run
+EOF
+
 
 exit 0
 # XXX -- move this to basic2, along with:

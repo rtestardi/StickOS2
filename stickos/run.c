@@ -2090,7 +2090,7 @@ XXX_PERF_XXX:
                 run_in_library = gosubs[max_gosubs].return_in_library;
             }
             break;
-
+            
         case code_sleep:
             // N.B. sleeps occur in the main loop so we can service interrupts
 
@@ -2180,6 +2180,10 @@ run_clear(bool flash)
 
     memset(data_line_number, 0, sizeof(data_line_number));
     memset(data_line_offset, 0, sizeof(data_line_offset));
+
+#if ! STICK_GUEST
+    wave("square", 0);  // XXX -- is this right?
+#endif
 
     code_clear2();
     var_clear(flash);

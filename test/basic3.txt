@@ -774,3 +774,13 @@ end
 3
 missing label: xxx
 STOP at line 50!
+wave statements
+error -   ^
+error -   ^
+  10 dim pot
+  20 pot = 3000
+  30 wave square pot*2
+  40 wave sine pot
+  50 wave triangle pot*3
+  60 wave ekg 0
+end

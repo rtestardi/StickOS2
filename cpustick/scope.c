@@ -778,6 +778,9 @@ wave(char *pattern, int hz)
         min = 10;
         max = 4000000;  // 4 MHz
 
+        // turn dma off
+        DCH5CONbits.CHEN = 0;
+
     } else {
         // arbitrary waveforms -- ekg, sine, triangle wave
         // prepare dac2
@@ -816,9 +819,6 @@ wave(char *pattern, int hz)
         OC11R = t/2+1;
         OC11RS = 1;
         OC11CONbits.ON = 1;
-
-        // turn dma off
-        DCH5CONbits.CHEN = 0;
 
     } else {
         // ekg, sine, triangle wave

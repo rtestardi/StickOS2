@@ -2,6 +2,7 @@
 
 enum bytecode2 {
     code_private = code_max,
+    code_wave,
     code_max_max
 };
 

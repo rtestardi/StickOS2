@@ -121,12 +121,6 @@
     <None Include="..\test\basic.txt">
       <Filter>test</Filter>
     </None>
-    <None Include="..\test\basic2.sh">
-      <Filter>test</Filter>
-    </None>
-    <None Include="..\test\basic2.txt">
-      <Filter>test</Filter>
-    </None>
     <None Include="..\test\basic3.sh">
       <Filter>test</Filter>
     </None>
@@ -134,9 +128,6 @@
       <Filter>test</Filter>
     </None>
     <None Include="..\test\test.sh">
-      <Filter>test</Filter>
-    </None>
-    <None Include="..\test\test2.sh">
       <Filter>test</Filter>
     </None>
     <None Include="..\test\test3.sh">
